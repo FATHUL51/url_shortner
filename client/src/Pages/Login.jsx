@@ -74,43 +74,43 @@ const Login = () => {
         </div>
         <div className="divcont">
           <h3 className="joinus">Login</h3>
+          <form
+            className="formcontainer"
+            onSubmit={(e) => {
+              submitHandler(e);
+            }}
+          >
+            <input
+              className="emailinput"
+              required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              type="email"
+              placeholder="Enter your email"
+              minLength={6}
+            />
+            <input
+              className="passinput"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              placeholder="Password"
+              minLength={6}
+            />
+            <button className="loginbtn">Log in</button>
+            <p className="signup">
+              Don't have an account ?
+              <Link to="/Signup" className="signupline">
+                SignUp
+              </Link>
+            </p>
+          </form>
         </div>
-        <form
-          className="formcontainer"
-          onSubmit={(e) => {
-            submitHandler(e);
-          }}
-        >
-          <input
-            className="emailinput"
-            required
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            type="email"
-            placeholder="Enter your email"
-            minLength={6}
-          />
-          <input
-            className="passinput"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            placeholder="Password"
-            minLength={6}
-          />
-          <button className="loginbtn">Log in</button>
-          <p className="signup">
-            Don't have an account ?
-            <Link to="/Signup" className="signupline">
-              SignUp
-            </Link>
-          </p>
-        </form>
       </div>
     </div>
   );

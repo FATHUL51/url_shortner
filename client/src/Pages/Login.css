@@ -53,7 +53,7 @@ body{
 .divcont{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 3rem;
 }
 .joinus{
     display: flex;
