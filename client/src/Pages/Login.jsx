@@ -33,7 +33,7 @@ const Login = () => {
         setUser(data.user);
         localStorage.setItem("token", data.token);
         Toastify({ text: "Login successful" }).showToast();
-        navigate("/");
+        navigate("/home");
         //to hide credentials from frontend
         // window.location.reload();
       }
@@ -75,44 +75,42 @@ const Login = () => {
         <div className="divcont">
           <h3 className="joinus">Login</h3>
         </div>
-        <div className="divcont">
-          <form
-            className="formcontainer"
-            onSubmit={(e) => {
-              submitHandler(e);
+        <form
+          className="formcontainer"
+          onSubmit={(e) => {
+            submitHandler(e);
+          }}
+        >
+          <input
+            className="emailinput"
+            required
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
             }}
-          >
-            <input
-              className="emailinput"
-              required
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              type="email"
-              placeholder="Enter your email"
-              minLength={6}
-            />
-            <input
-              className="passinput"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              placeholder="Password"
-              minLength={6}
-            />
-            <button className="loginbtn">Log in</button>
-            <p className="signup">
-              Don't have an account ?
-              <Link to="/Signup" className="signupline">
-                SignUp
-              </Link>
-            </p>
-          </form>
-        </div>
+            type="email"
+            placeholder="Enter your email"
+            minLength={6}
+          />
+          <input
+            className="passinput"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Password"
+            minLength={6}
+          />
+          <button className="loginbtn">Log in</button>
+          <p className="signup">
+            Don't have an account ?
+            <Link to="/Signup" className="signupline">
+              SignUp
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

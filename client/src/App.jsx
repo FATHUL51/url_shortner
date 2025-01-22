@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import UserProtectedWrapper from "./Pages/UserProtectedWrapper";
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
+import Home from "./Pages/Home";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/" element={<Signup />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="home" element={<Home />} />
       </Routes>
     </div>
   );
