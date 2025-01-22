@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+body{
+    margin: 0;
+    padding: 0;
+}
+.main{
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    font-family: "Manrope";
+}
+.image{
+ overflow: hidden;
+ contain: content;
+ position: relative;
+ .logo{
+    position: absolute;
+    top:1.5rem;
+    left: 1rem;
+    width: 30%;
+ }
+}
+.maincontainer{
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+}
+.top {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-right: 1rem;
+   
+}
+.loginbtn{
+    background-color: #1b48da;
+    border: none;
+    padding:  0.5rem 1rem;
+    border-radius: 0.45rem;
+    font-family: "Manrope";
+    color:white;
+    font-weight: 600;
+}
+.signupbtn{
+    background-color: white;
+    border: none;
+    padding:  0.5rem 1rem;
+    border-radius: 0.45rem;
+    font-family: "Manrope";
+    color:black;
+    font-weight: 600;
+}
+.divcont{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.joinus{
+    display: flex;
+    width: 80%;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: auto;
+}
+.formcontainer{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    gap:1rem;
+    margin: auto;
+}
+.emailinput,.passinput{
+    height: 1.8rem;
+    border:solid 1px;
+    border-radius: 0.3rem;
+    padding-left:1rem ;
+}
+.register{
+    background-color: #1b48da;
+    color:#fff;
+    font-family: "Manrope";
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    border: none;
+}
+.signup{
+    font-size: 0.8rem;
+    font-weight: 600;
+   text-align: center;
+   margin: 0;
+}
+.signupline{
+    text-decoration: none;
+    color: #1b48da;
+}
