@@ -2,10 +2,13 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middlewares/auth.middleware");
 const User = require("../models/user.model");
+const ShortUrlModel = require("../models/shortUrl.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { header } = require("express-validator");
+const shortid = require("shortid");
+const device = require("device");
 
 dotenv.config();
 router.use(express.json());
@@ -64,6 +67,125 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/url", authMiddleware, async (req, res) => {
+  const { orignalLink, remarks, expirationdate, device } = req.body; // Include remarks and expirationdate
+  const ipAddress = req.ip || req.headers["x-forwarded-for"] || "Unknown";
+  const shortID = shortid();
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!orignalLink) {
+      return res.status(400).json({ message: "Original URL is required" });
+    }
+
+    if (!remarks) {
+      return res.status(400).json({ message: "Remarks are required" });
+    }
+
+    // Ensure the device object exists and has the necessary properties
+    const deviceInfo = device
+      ? {
+          device: device.deviceType || "Unknown",
+          os: device.os || "Unknown",
+          browser: device.browserName || "Unknown",
+          browserVersion: device.browserVersion || "Unknown",
+        }
+      : {
+          device: "Unknown",
+          os: "Unknown",
+          browser: "Unknown",
+          browserVersion: "Unknown",
+        };
+
+    // Create the short URL with remarks and expiration date
+    const shortURL = await ShortUrlModel.create({
+      shortId: shortID,
+      redirectURL: orignalLink,
+      user: user,
+      remarks: remarks,
+      expirationdate: expirationdate || null, // If no expiration date, set to null
+      clicks: [], // Initially no clicks
+    });
+
+    // Log the click details for the first click (optional)
+    shortURL.clicks.push({
+      timestamp: Date.now(),
+      ipAddress: ipAddress,
+      ...deviceInfo,
+    });
+
+    // Save the short URL with the click information
+    await shortURL.save();
+
+    res.status(201).json({
+      message: "Short URL created successfully",
+      id: shortID,
+      redirectURL: orignalLink,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+router.get("/url", authMiddleware, async (req, res) => {
+  try {
+    // Fetch all short URLs associated with the authenticated user
+    const shortUrls = await ShortUrlModel.find({ user: req.user.id });
+
+    if (!shortUrls || shortUrls.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No short URLs found for this user" });
+    }
+
+    // Return the raw data without using map
+    res.status(200).json({
+      message: "User short URLs fetched successfully",
+      data: shortUrls,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+router.get("/:shortId", async (req, res) => {
+  try {
+    const shortUrl = await ShortUrlModel.findOne({
+      shortId: req.params.shortId,
+    });
+    if (!shortUrl) {
+      return res.status(404).json({ message: "Short URL not found" });
+    }
+
+    // Check if the short URL has expired
+    if (
+      shortUrl.expirationdate &&
+      new Date() > new Date(shortUrl.expirationdate)
+    ) {
+      return res.status(410).json({ message: "This short URL has expired" });
+    }
+
+    // Otherwise, redirect the user
+    res.redirect(shortUrl.redirectURL);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
