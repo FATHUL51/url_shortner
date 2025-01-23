@@ -8,22 +8,41 @@ body{
     grid-template-columns: 1fr 1.1fr;
     font-family: "Manrope";
 }
-.image{
- overflow: hidden;
- contain: content;
- position: relative;
- .logo{
-    position: absolute;
-    top:1.5rem;
-    left: 1rem;
-    width: 30%;
- }
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.logo {
+    position: absolute;
+    top: 1.5rem;
+    left: 1rem; 
+    width: 30%;
+    z-index: 1; 
+}
+
 .maincontainer{
     display: flex;
     flex-direction: column;
     gap: 6rem;
 }
+
+.top {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-right: 1rem;
+}
+
 .top {
     margin-top: 1.5rem;
     display: flex;

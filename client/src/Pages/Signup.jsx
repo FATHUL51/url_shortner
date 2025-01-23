@@ -83,9 +83,9 @@ const Signup = () => {
   };
   return (
     <div className="main">
-      <div className="image">
+      <div className="container">
         <img className="logo" src={logo} alt="" />
-        <img src={image} alt="" />
+        <img className="image" src={image} alt="" />
       </div>
       <div className="maincontainer">
         <div className="top">

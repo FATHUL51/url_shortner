@@ -1,37 +1,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 body{
     margin: 0;
     padding: 0;
 }
+
 .main{
     display: grid;
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: 1fr 1fr;
     font-family: "Manrope";
 }
-.image{
- overflow: hidden;
- contain: content;
- position: relative;
- .logo{
-    position: absolute;
-    top:1.5rem;
-    left: 1rem;
-    width: 30%;
- }
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.logo {
+    position: absolute;
+    top: 1.5rem;
+    left: 1rem; 
+    width: 30%;
+    z-index: 1; 
+}
+
 .maincontainer{
     display: flex;
     flex-direction: column;
     gap: 6rem;
 }
+
 .top {
     margin-top: 1.5rem;
     display: flex;
     flex-direction: row;
     justify-content: end;
     padding-right: 1rem;
-   
 }
+
 .loginbtn{
     background-color: #1b48da;
     border: none;
@@ -41,6 +55,7 @@ body{
     color:white;
     font-weight: 600;
 }
+
 .signupbtn{
     background-color: white;
     border: none;
@@ -50,11 +65,13 @@ body{
     color:black;
     font-weight: 600;
 }
+
 .divcont{
     display: flex;
     flex-direction: column;
     gap: 3rem;
 }
+
 .joinus{
     display: flex;
     width: 80%;
@@ -62,6 +79,7 @@ body{
     font-size: 1rem;
     margin: auto;
 }
+
 .formcontainer{
     display: flex;
     flex-direction: column;
@@ -69,12 +87,14 @@ body{
     gap:1rem;
     margin: auto;
 }
+
 .emailinput,.passinput{
-    height: 1.8rem;
+    max-height: 5rem;
     border:solid 1px;
     border-radius: 0.3rem;
     padding-left:1rem ;
 }
+
 .register{
     background-color: #1b48da;
     color:#fff;
@@ -84,12 +104,14 @@ body{
     border-radius: 0.3rem;
     border: none;
 }
+
 .signup{
     font-size: 0.8rem;
     font-weight: 600;
    text-align: center;
    margin: 0;
 }
+
 .signupline{
     text-decoration: none;
     color: #1b48da;
