@@ -16,16 +16,16 @@ const Greet = () => {
   let greeting = "";
   let avatarUrl = "";
 
-  if (hours < 12) {
+  if (hours > 6 && hours < 12) {
     greeting = "Good morning";
     avatarUrl = "☀️";
-  } else if (hours < 18) {
+  } else if (hours > 12 && hours < 18) {
     greeting = "Good afternoon";
     avatarUrl = "🌤️";
-  } else if (hours < 22) {
+  } else if (hours > 18 && hours < 22) {
     greeting = "Good evening";
     avatarUrl = "🌃";
-  } else {
+  } else if (hours > 22 || hours < 6) {
     greeting = "Good night";
     avatarUrl = "🌙";
   }
@@ -35,7 +35,7 @@ const Greet = () => {
   const fetchUserName = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/user`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/profile`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

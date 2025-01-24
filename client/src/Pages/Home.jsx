@@ -36,7 +36,7 @@ const Home = () => {
   const fetchUserName = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/user`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/profile`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

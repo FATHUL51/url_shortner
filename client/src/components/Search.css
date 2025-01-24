@@ -8,12 +8,13 @@
 }
 .search-container{
     position: relative;
+    width: 100%;
 }
 .createstyle{
     display: flex;
     align-items: center;
     height: 2rem;
-    width: 9rem;
+    width: 13rem;
     padding: 1.3rem 1rem;
     font-size: 1rem;
     font-family: "Manrope";
@@ -23,13 +24,13 @@
     border-radius: 0.4rem ;
     font-weight: 600;
     .span{
-        font-size: 1.5rem;
-        margin-right: 10px;
+        font-size: 1rem;
+        margin-right: 5px;
     }
 }
 .filter{
     position: relative;
-    width: 12rem;
+    width: 50%;
     border-radius: 0.4rem;
     border: solid 2px #b1b3c8;
     padding: 0.2rem 0 0.2rem 3rem;
@@ -37,12 +38,18 @@
 }
 @media (min-width:1400px) {
     .filter{
-        width: 13rem;
+        width: 70%;
+    }
+    .span{
+        font-size: 1.5rem;
+        margin-right: 10px;
+        
     }
 }
-@media (min-width:1500px) {
+
+@media (min-width:2500px) {
     .filter{
-        width: 20rem;
+        width: 80%;
     }
 }
 .iconx{

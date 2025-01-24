@@ -1,0 +1,168 @@
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    margin-top: 5%;
+    align-items: center;
+}
+
+.settings-container {
+    font-family: "Manrope", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    gap: 2rem;
+}
+
+.settingname {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    width: 30%;
+    text-align: left;
+}
+
+input {
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    width: 70%; 
+    padding: 0.8rem 1rem;
+    border: 1px solid #ececf2;
+    border-radius: 0.5rem;
+    background-color: #f9f9f9;
+    outline: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    width: 50%;
+}
+
+.savebtn,
+.deletebtn {
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.savebtn {
+    background-color: #1b48da;
+    color: white;
+}
+
+.savebtn:hover {
+    background-color: #0056b3;
+}
+
+.deletebtn {
+    background-color: #eb0d0d;
+    color: white;
+}
+
+.deletebtn:hover {
+    background-color: #a71d2a;
+}
+.delete-dropdown {
+    background-color: white;
+    position: absolute;
+    width: 30rem; 
+    height: 15rem;
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.crosss {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #aaa; 
+    transition: color 0.2s ease;
+}
+
+.crosss:hover {
+    color: #000; 
+}
+
+.delete-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete-text {
+    font-family: "Manrope", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #000;
+    text-align: center; 
+    margin-top: 0; 
+}
+
+.delete-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.dltbtn {
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 4.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #1b48da;
+    color: white;
+}
+
+.dltbtn:hover {
+    background-color: #163bb7;
+    transform: scale(1.05); 
+}
+
+.dltbtn1 {
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 4.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #ececee;
+    color: black;
+}
+
+.dltbtn1:hover {
+    background-color: #d9d9db; /* Slightly darker gray on hover */
+    transform: scale(1.05); /* Slight zoom on hover */
+}

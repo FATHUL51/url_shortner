@@ -73,7 +73,7 @@
 }
 .searchbar{
     display: grid;
-    grid-template-columns: 3fr 2.5fr  .5fr;
+    grid-template-columns: 3fr 3fr  .5fr;
     justify-content: space-between;
     border-bottom: solid 3px #f6f6f9;
 }
