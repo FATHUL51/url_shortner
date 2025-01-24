@@ -102,7 +102,7 @@ const Login = () => {
               placeholder="Password"
               minLength={6}
             />
-            <button className="loginbtn">Log in</button>
+            <button className="register">Log in</button>
             <p className="signup">
               Don't have an account ?
               <Link to="/Signup" className="signupline">
