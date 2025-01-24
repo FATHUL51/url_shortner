@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
 });
 
 // GET /user route to fetch user profile details
-router.get("/user", authMiddleware, async (req, res) => {
+router.get("/profile", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password"); // Exclude password from the response
     if (!user) {
@@ -212,4 +212,43 @@ router.get("/:shortId", async (req, res) => {
   res.redirect(entry.redirectURL);
 });
 
+router.delete("/delete", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await ShortUrlModel.deleteMany({ user: req.user.id });
+    res
+      .status(200)
+      .json({ message: "User and related data deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+router.put("/update", authMiddleware, async (req, res) => {
+  const { username, email, mobile } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (mobile) user.mobile = mobile;
+    await user.save();
+    res
+      .status(200)
+      .json({ message: "User information updated successfully", data: user });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
 module.exports = router;
