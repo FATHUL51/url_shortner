@@ -9,7 +9,7 @@ import "toastify-js/src/toastify.css";
 import Greet from "../components/Greet";
 import SearchComponent from "../components/Search";
 
-const Home = () => {
+const Analytics = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -52,12 +52,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/") {
-      navigate("/home");
+    if (location.pathname === "/settings") {
+      navigate("/settings");
     }
     fetchUserName();
   }, [location.pathname, navigate]);
-
   return (
     <div className="mainbody">
       <div className="vr"></div>
@@ -80,6 +79,7 @@ const Home = () => {
               </span>
               <h3 className="texts">Links</h3>
             </Link>
+
             <Link to="/analytics" className={getSidebarItemClass("/analytics")}>
               <span>
                 <i className="ri-line-chart-fill icons"></i>
@@ -130,4 +130,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Analytics;

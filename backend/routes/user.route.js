@@ -8,7 +8,8 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { header } = require("express-validator");
 const shortid = require("shortid");
-const device = require("device");
+const device = require("express-device");
+const UAParser = require("ua-parser-js");
 
 dotenv.config();
 router.use(express.json());
@@ -37,6 +38,24 @@ router.post("/register", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: `${error}` });
+  }
+});
+
+// GET /user route to fetch user profile details
+router.get("/user", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password"); // Exclude password from the response
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User profile fetched successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -163,30 +182,34 @@ router.get("/url", authMiddleware, async (req, res) => {
 });
 
 router.get("/:shortId", async (req, res) => {
-  try {
-    const shortUrl = await ShortUrlModel.findOne({
-      shortId: req.params.shortId,
-    });
-    if (!shortUrl) {
-      return res.status(404).json({ message: "Short URL not found" });
-    }
+  const shortId = req.params.shortId;
+  const ipAddress = req.ip;
+  const deviceType = req.device.type;
+  const userAgent = req.headers["user-agent"];
+  const parser = new UAParser();
+  const result = parser.setUA(userAgent).getResult();
+  const os = result.os.name;
 
-    // Check if the short URL has expired
-    if (
-      shortUrl.expirationdate &&
-      new Date() > new Date(shortUrl.expirationdate)
-    ) {
-      return res.status(410).json({ message: "This short URL has expired" });
-    }
+  const entry = await ShortUrlModel.findOneAndUpdate(
+    { shortId },
+    {
+      $push: {
+        clicks: {
+          timestamp: Date.now(),
+          ipAddress: ipAddress,
+          device: deviceType,
+          os: os,
+        },
+      },
+    },
+    { new: true }
+  );
 
-    // Otherwise, redirect the user
-    res.redirect(shortUrl.redirectURL);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+  if (!entry) {
+    return res.status(404).json({ message: "Short URL not found" });
   }
+
+  res.redirect(entry.redirectURL);
 });
 
 module.exports = router;

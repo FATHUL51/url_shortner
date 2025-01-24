@@ -1,0 +1,55 @@
+.search{
+    display: flex;
+    flex-direction: row;
+    gap:1rem;
+    height: 5rem;
+    margin-top: 0.6rem;
+    align-items: center;
+}
+.search-container{
+    position: relative;
+}
+.createstyle{
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    width: 9rem;
+    padding: 1.3rem 1rem;
+    font-size: 1rem;
+    font-family: "Manrope";
+    color: #fff;
+    background-color: #1b48da;
+    border: none;
+    border-radius: 0.4rem ;
+    font-weight: 600;
+    .span{
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+}
+.filter{
+    position: relative;
+    width: 12rem;
+    border-radius: 0.4rem;
+    border: solid 2px #b1b3c8;
+    padding: 0.2rem 0 0.2rem 3rem;
+    height: 2rem;
+}
+@media (min-width:1400px) {
+    .filter{
+        width: 13rem;
+    }
+}
+@media (min-width:1500px) {
+    .filter{
+        width: 20rem;
+    }
+}
+.iconx{
+    position: absolute;
+    top: 22%;
+    left: 0.5rem;
+    font-size: 1.5rem;
+    color: #b1b3c8;
+    z-index: 1;
+}

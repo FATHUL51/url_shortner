@@ -1,0 +1,140 @@
+.mainbody{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    position: relative;
+    height: 100vh;
+}
+
+.sidebar-logo{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+}
+.logos{
+    margin: 1rem 0 2.5rem 0;
+    display: flex;
+    width: 50%;
+    height: 3rem;
+}
+.vr{
+    border-left: solid 3px #f6f6f9;
+    position: absolute;
+    top:12%;
+    bottom: 0;
+    left: 25%;
+}
+@media (min-width: 1400px) {
+    .vr{
+        top:9.5%;
+    }
+    
+}
+@media (min-width: 1500px) {
+    .vr{
+        top:5.5%;
+    }
+    
+}
+.sidebar-items{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0rem 0 1rem 0;
+}
+.sidebar-item{
+    font-family: "Manrope";
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items:center ;
+    width: 80%;
+    margin:auto;
+    padding: 0 1rem ;
+    border: none;
+    background-color: #fff;
+    border-radius: .5rem;
+}
+
+.texts{
+    margin: 0;
+    padding: .5rem 0;
+}
+.icons{
+    font-size: 1.5rem;
+}
+.settings{
+    border-top: solid 3px #f6f6f9;
+    border-bottom: solid 3px #f6f6f9;
+    margin: 1.5rem 0;
+    padding: 1.5rem 0;
+}
+.searchbar{
+    display: grid;
+    grid-template-columns: 3fr 2.5fr  .5fr;
+    justify-content: space-between;
+    border-bottom: solid 3px #f6f6f9;
+}
+.profilecont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
+    cursor: pointer;
+}
+.profile{
+    position: relative;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: brown;
+}
+.usertext{
+    position: absolute;
+    top: 11%;
+    left: 24%;
+    font-family: "Manrope";
+    font-weight: 700;
+    font-size: 2rem;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+.profile-dropdown{
+    position: absolute;
+    top: 6rem;
+    right: 0;
+    width: 9rem;
+    border-radius: .5rem;
+    color: #000;
+}
+.logout{
+    font-family: "Manrope";
+    font-weight: 600;
+    font-size: 1rem;
+    padding: .5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f6f6f9;
+    color:#878b89;
+    border: none;
+    border-radius: 0.4rem;
+}
+.sidebar-item {
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .sidebar-item.active {
+    background-color: #f3f7fd;
+    color: #1b48da;
+    font-weight: bold;
+  }
+  .maintexts{
+    margin-left: 10px;
+    margin-top: 10px;
+  }

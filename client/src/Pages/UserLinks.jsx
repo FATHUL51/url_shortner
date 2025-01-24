@@ -9,7 +9,7 @@ import "toastify-js/src/toastify.css";
 import Greet from "../components/Greet";
 import SearchComponent from "../components/Search";
 
-const Home = () => {
+const UserLinks = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -52,12 +52,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/") {
-      navigate("/home");
+    if (location.pathname === "/links") {
+      navigate("/links");
     }
     fetchUserName();
   }, [location.pathname, navigate]);
-
   return (
     <div className="mainbody">
       <div className="vr"></div>
@@ -130,4 +129,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default UserLinks;

@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 body{
     margin: 0;
     padding: 0;
 }
+
 .main{
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     font-family: "Manrope";
 }
+
 .container {
     position: relative;
     width: 100%;
