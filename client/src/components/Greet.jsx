@@ -43,18 +43,19 @@ const Greet = () => {
         }
       );
       if (response.status === 200) {
-        setName(response.data.data.username);
+        const fetchedName = response.data.data.username;
+        setName(fetchedName);
       }
     } catch (err) {
       setError("Failed to load name");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUserName()
-      .then(() => setLoading(false))
-      .catch(() => setLoading(false));
+    fetchUserName();
   }, []);
 
   if (loading) {
@@ -64,6 +65,9 @@ const Greet = () => {
   if (error) {
     return <div>{error}</div>;
   }
+
+  const truncatedName =
+    name.length > 7 ? name.trim().substring(0, 7) + "..." : name;
 
   return (
     <div className="greetcontainer">
@@ -76,7 +80,7 @@ const Greet = () => {
         </span>
         <div>
           <h1 className="headings">
-            {greeting}, {name.trim().substring(0, 7)}...
+            {greeting}, {truncatedName}
           </h1>
           <p className="date">{formattedDate}</p>
         </div>
