@@ -180,6 +180,7 @@ const Settings = () => {
             <div className="settings-container">
               <label className="settingname">Name</label>
               <input
+                className="input12"
                 type="text"
                 id="username"
                 name="username"
@@ -190,6 +191,7 @@ const Settings = () => {
             <div className="settings-container">
               <label className="settingname">Email Id</label>
               <input
+                className="input12"
                 type="email"
                 id="email"
                 name="email"
@@ -200,6 +202,7 @@ const Settings = () => {
             <div className="settings-container">
               <label className="settingname">Mobile no.</label>
               <input
+                className="input12"
                 type="text"
                 id="mobile"
                 name="mobile"

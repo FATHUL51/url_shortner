@@ -24,7 +24,7 @@
     text-align: left;
 }
 
-input {
+.input12 {
     font-family: "Manrope", sans-serif;
     font-size: 1rem;
     font-weight: 400;
@@ -38,7 +38,7 @@ input {
     transition: all 0.3s ease;
 }
 
-input:focus {
+.input12:focus {
     border-color: #007bff;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);

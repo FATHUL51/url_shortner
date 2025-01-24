@@ -95,7 +95,7 @@ body{
     height: 1.8rem;
     border:solid 1px;
     border-radius: 0.3rem;
-    padding-left:1rem ;
+    padding: 0.4rem 1rem;
 }
 .register{
     background-color: #1b48da;
