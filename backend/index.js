@@ -17,7 +17,8 @@ app.use("/api/user", userRoute);
 app.get("/", (req, res) => {
   res.send("hello");
 });
-
+app.set("trust proxy", true);
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.listen(PORT, () => {
