@@ -35,7 +35,7 @@ const Login = () => {
         Toastify({ text: "Login successful" }).showToast();
         navigate("/home");
         //to hide credentials from frontend
-        // window.location.reload();
+        window.location.reload();
       }
     } catch (error) {
       if (error.response) {

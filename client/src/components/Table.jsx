@@ -82,11 +82,7 @@ const Table = () => {
                 </td>
                 <td>{row.redirectURL}</td>
                 <td>{`https://url-shortner-snq5.onrender.com/api/user/${row.shortId}`}</td>
-                <td>
-                  {row.ipAddress
-                    ? row.ipAddress.trim().substring(0, 12)
-                    : "N/A"}
-                </td>
+                <td>{row.ipAddress}</td>
                 <td>{row.device}</td>
                 <td>{row.os}</td>
               </tr>
