@@ -170,7 +170,11 @@
     overflow: hidden;
 }
 .device{
-    color:#1b48da
+  font-family: "Manrope";
+  font-weight: 600;
+  font-size: 1rem;
+    color:#1b48da;
+    margin: 0;
 }
 .clickdashboard{
     border: solid 1px #878b89;
@@ -182,4 +186,7 @@
     border-radius: .5rem;
     padding: 0 0 0 1rem ;
 
+}
+.scroll-container {
+  overflow-y: auto;
 }

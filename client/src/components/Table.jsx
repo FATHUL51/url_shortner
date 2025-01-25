@@ -7,7 +7,7 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 9;
 
-  // Fetch analytics data from backend
+  // Fetch analytics data from the backend
   const fetchAnalyticsData = async () => {
     try {
       const response = await axios.get(
@@ -30,7 +30,7 @@ const Table = () => {
     fetchAnalyticsData();
   }, []);
 
-  // Calculate the rows to display for the current page
+  // Calculate rows to display for the current page
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const currentRows = analyticsData
@@ -51,13 +51,9 @@ const Table = () => {
       rowsPerPage
   );
 
-  // Generate page numbers for pagination
-  const generatePageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers;
+  // Handle page changes
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -105,6 +101,7 @@ const Table = () => {
 
       {/* Styled Pagination */}
       <div className="pagination">
+        {/* Previous Button */}
         <button
           className="page-button"
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -112,17 +109,56 @@ const Table = () => {
         >
           &lt;
         </button>
-        {generatePageNumbers().map((pageNumber) => (
-          <button
-            key={pageNumber}
-            className={`page-button ${
-              pageNumber === currentPage ? "active" : ""
-            }`}
-            onClick={() => setCurrentPage(pageNumber)}
-          >
-            {pageNumber}
-          </button>
-        ))}
+
+        {/* First Page */}
+        {currentPage > 2 && (
+          <>
+            <button
+              className={`page-button ${currentPage === 1 ? "active" : ""}`}
+              onClick={() => handlePageChange(1)}
+            >
+              1
+            </button>
+            {currentPage > 3 && <span className="ellipsis">...</span>}
+          </>
+        )}
+
+        {/* Pages Around Current Page */}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter(
+            (page) =>
+              page === currentPage ||
+              page === currentPage - 1 ||
+              page === currentPage + 1
+          )
+          .map((page) => (
+            <button
+              key={page}
+              className={`page-button ${currentPage === page ? "active" : ""}`}
+              onClick={() => handlePageChange(page)}
+            >
+              {page}
+            </button>
+          ))}
+
+        {/* Last Page */}
+        {currentPage < totalPages - 1 && (
+          <>
+            {currentPage < totalPages - 2 && (
+              <span className="ellipsis">...</span>
+            )}
+            <button
+              className={`page-button ${
+                currentPage === totalPages ? "active" : ""
+              }`}
+              onClick={() => handlePageChange(totalPages)}
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
+
+        {/* Next Button */}
         <button
           className="page-button"
           onClick={() =>

@@ -211,22 +211,32 @@ const Home = () => {
               fontFamily: "Manrope",
             }}
           >
-            Total Clicks:
+            Total Clicks:{" "}
             {graphData.reduce((acc, curr) => acc + curr.clicks, 0)}
           </h2>
           <div className="graphcontainer">
             <div className="clickdashboard">
               <h4 className="device">Date-wise Clicks</h4>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer
+                width="100%"
+                height={
+                  graphData.length >= 5
+                    ? 400
+                    : graphData.length >= 2
+                    ? 300
+                    : 100
+                }
+                className={graphData.length >= 5 ? "scroll-container" : ""}
+              >
                 <BarChart
                   data={[...graphData].sort(
                     (a, b) => new Date(b.date) - new Date(a.date)
-                  )} // Sort latest date first
+                  )}
                   layout="vertical"
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  margin={{ top: 0, right: 20, left: 20, bottom: 0 }}
+                  barCategoryGap={15}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
+                  <XAxis type="number" hide />
                   <YAxis
                     type="category"
                     dataKey="date"
@@ -240,9 +250,15 @@ const Home = () => {
                       const [year, month, day] = date.split("-");
                       return `${day}-${month}-${year}`;
                     }}
+                    axisLine={false}
+                    tickLine={false}
                   />
-                  <Tooltip />
-                  <Bar dataKey="clicks" fill="#1b48da" barSize={20}>
+                  <Bar
+                    dataKey="clicks"
+                    fill="#1b48da"
+                    barSize={24}
+                    radius={[0, 8, 8, 0]}
+                  >
                     <LabelList
                       dataKey="clicks"
                       position="right"
@@ -257,40 +273,52 @@ const Home = () => {
               </ResponsiveContainer>
             </div>
             <div className="devicegraph">
-              {/* Device-wise Graph */}
               <h4 className="device">Click Devices</h4>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer
+                width="100%"
+                height={
+                  deviceGraphData.length >= 5
+                    ? 400
+                    : deviceGraphData.length > 2
+                    ? 300
+                    : 100
+                }
+                className={
+                  deviceGraphData.length >= 5 ? "scroll-container" : ""
+                }
+              >
                 <BarChart
                   data={deviceGraphData}
-                  layout="vertical" // Horizontal bar chart
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  layout="vertical"
+                  margin={{ top: 0, right: 20, left: 20, bottom: 0 }}
+                  barCategoryGap={0}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
+                  <XAxis type="number" hide />
                   <YAxis
                     dataKey="device"
                     type="category"
                     tick={{
                       fontFamily: "Manrope",
                       fontWeight: "700",
-                      fontSize: "16px",
-                    }} // Bold and larger font for device names
+                      fontSize: "14px",
+                    }}
+                    axisLine={false}
+                    tickLine={false}
                   />
-                  <Tooltip />
                   <Bar
                     dataKey="clicks"
                     fill="#1b48da"
-                    radius={[0, 0, 0, 0]}
-                    barSize={20}
+                    barSize={24}
+                    radius={[0, 8, 8, 0]}
                   >
                     <LabelList
                       dataKey="clicks"
                       position="right"
                       style={{
                         fontWeight: "700",
-                        fontSize: "14px",
+                        fontSize: "12px",
                         fill: "#000",
-                      }} // Styling for total clicks
+                      }}
                     />
                   </Bar>
                 </BarChart>
