@@ -3,13 +3,20 @@ import axios from "axios";
 import "./TableComponent.css";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import Copy from "../assets/images/Copy";
 
 const TableWithSearchComponent = () => {
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1); // Current page number
-  const rowsPerPage = 9; // Number of rows per page
+  const rowsPerPage = 9;
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [originalLink, setOriginalLink] = useState("");
+  const [remark, setRemark] = useState("");
+  const [isLinkExpired, setIsLinkExpired] = useState(false);
+  const [date, setDate] = useState("");
+  // Number of rows per page
 
   // Fetch data on mount
   useEffect(() => {
@@ -34,6 +41,25 @@ const TableWithSearchComponent = () => {
     fetchData();
   }, []);
 
+  const closeDropdown = () => {
+    setIsDropdownVisible(false);
+  };
+
+  const handleOriginalLinkChange = (e) => {
+    setOriginalLink(e.target.value);
+  };
+
+  const handleRemarkChange = (e) => {
+    setRemark(e.target.value);
+  };
+  const handledatechnage = (e) => {
+    setDate(e.target.value);
+  };
+
+  const handleCheckboxChange = () => {
+    setIsLinkExpired(!isLinkExpired);
+  };
+
   // Filtered and paginated table data
   const filteredData = tableData.filter((row) =>
     row.redirectURL.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,6 +71,10 @@ const TableWithSearchComponent = () => {
   // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
   };
 
   // Calculate total pages
@@ -97,12 +127,7 @@ const TableWithSearchComponent = () => {
                             7
                           )}
                           ...
-                          <i
-                            className="ri-file-copy-line"
-                            style={{
-                              fontSize: "1.5rem",
-                              cursor: "pointer",
-                            }}
+                          <span
                             onClick={() => {
                               navigator.clipboard.writeText(
                                 `https://url-shortner-snq5.onrender.com/api/user/${row.shortId}`
@@ -127,7 +152,13 @@ const TableWithSearchComponent = () => {
                                 },
                               }).showToast();
                             }}
-                          ></i>
+                          >
+                            <Copy
+                              style={{
+                                cursor: "pointer",
+                              }}
+                            />
+                          </span>
                         </span>
                       </td>
                       <td>{row.remarks}</td>
@@ -142,7 +173,77 @@ const TableWithSearchComponent = () => {
                         {status}
                       </td>
                       <td>
-                        <button className="edit">Edit</button>
+                        <button className="edit" onClick={toggleDropdown}>
+                          Edit
+                        </button>
+                        {isDropdownVisible && (
+                          <div className="createsection">
+                            <div className="dropdown-header">
+                              <h3 className="h3">New Link</h3>
+                              <span onClick={closeDropdown}>
+                                <i className="ri-close-line closed"></i>
+                              </span>
+                            </div>
+
+                            <div className="dropdown-body">
+                              <div>
+                                <h3 className="h3">
+                                  Destination Url <span className="p">*</span>
+                                </h3>
+                                <input
+                                  required
+                                  className="originallink"
+                                  type="text"
+                                  value={originalLink}
+                                  placeholder="https://web.whatsapp.com/"
+                                  onChange={handleOriginalLinkChange}
+                                />
+                              </div>
+
+                              <div className="dropdown-body">
+                                <h3 className="h3">
+                                  Remarks <span className="p">*</span>
+                                </h3>
+                                <input
+                                  required
+                                  className="remarks"
+                                  type="text"
+                                  value={remark}
+                                  placeholder="Add remarks"
+                                  onChange={handleRemarkChange}
+                                />
+                              </div>
+
+                              <div>
+                                <div className="Linksbattle">
+                                  <h3 className="h3">Link Expiration</h3>
+                                  <div className="checkbox-apple">
+                                    <input
+                                      className="yep"
+                                      id="check-apple"
+                                      type="checkbox"
+                                      checked={isLinkExpired}
+                                      onChange={handleCheckboxChange}
+                                    />
+                                    <label htmlFor="check-apple"></label>
+                                  </div>
+                                </div>
+                                <div>
+                                  <input
+                                    className="originallink"
+                                    value={date}
+                                    onChange={handledatechnage}
+                                    type="date"
+                                  />
+                                </div>
+                              </div>
+                              <div className="buttonkatil">
+                                <button className="clear">Clear</button>
+                                <button className="crtnew">Create new</button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                         <button className="delete">Delete</button>
                       </td>
                     </tr>

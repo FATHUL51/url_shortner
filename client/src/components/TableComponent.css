@@ -68,3 +68,6 @@
     font-size: 12px;
   }
   
+.copy-button{
+  display: flex;
+}

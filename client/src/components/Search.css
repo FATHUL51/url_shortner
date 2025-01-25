@@ -60,3 +60,150 @@
     color: #b1b3c8;
     z-index: 1;
 }
+/* From Uiverse.io by guilhermeyohan */ 
+.checkbox-apple {
+    position: relative;
+    width: 50px;
+    height: 25px;
+    margin: 20px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .checkbox-apple label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 25px;
+    border-radius: 50px;
+    background: linear-gradient(to bottom, #b3b3b3, #e6e6e6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .checkbox-apple label:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .checkbox-apple input[type="checkbox"]:checked + label {
+    background: linear-gradient(to bottom, #1b48da, #1b48da);
+  }
+  
+  .checkbox-apple input[type="checkbox"]:checked + label:after {
+    transform: translateX(25px);
+  }
+  
+  .checkbox-apple label:hover {
+    background: linear-gradient(to bottom, #b3b3b3, #e6e6e6);
+  }
+  
+  .checkbox-apple label:hover:after {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .yep {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 25px;
+  }
+  .createsection{
+    position: absolute;
+    background-color: white;
+    top:20%;
+    right: 30%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    gap:1rem;
+    border:1px solid #b1b3c8;
+    }
+  .dropdown-header{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 2rem;
+    justify-content: space-between;
+    background-color: rgba(59, 60, 81);
+    color:white; 
+    padding: 0.5rem 0;
+   .h3{
+    font-size: medium;
+   }
+  }
+  .closed{
+    color:white;
+    font-size: 1.5rem;
+    padding: 1rem 0;
+   }
+  .h3{
+    margin:0 1rem;
+    font-family: "Manrope";
+    font-size: 1rem;
+   }
+   .p{
+    color:red;
+   }
+   
+  .originallink{
+    margin: 1rem 1rem;
+    padding: 0 0 0 1rem;
+    width: 90%;
+    height: 1.8rem;
+    border: 1px solid #b3b3b3;
+    border-radius: 0.3rem;
+  }
+  .remarks{
+    margin: 1rem 1rem;
+    padding: 0.5rem 0 10rem 1rem;
+    width: 90%;
+    align-items: start;
+    border: 1px solid #b3b3b3;
+    border-radius: 0.3rem;
+  }
+  .Linksbattle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 1.5rem;
+  }
+  .buttonkatil{
+    margin: 5rem 1rem 0 0;
+    padding: 0.8rem 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    background-color: rgba(59, 60, 81, 0.1);
+  }
+  .clear{
+    margin-left: 0.5rem ;
+    font-family: "Manrope";
+    font-weight: 600;
+    border:none;
+    font-size: 1rem;
+   }
+  .crtnew{
+    padding: 0.5rem 1.5rem;
+    margin-right: 0.5rem;
+    background-color: #1b48da;
+    color: #fff;
+    font-family: "Manrope";
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.4rem;
+    border:none;
+  }

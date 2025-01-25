@@ -157,6 +157,11 @@
     color: #1b48da;
     font-weight: bold;
   }
+  .dashboard{
+    width: 30px;
+  }
+
+ 
   .maintexts{
     margin: 10px 10px;
   }

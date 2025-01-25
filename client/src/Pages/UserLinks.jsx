@@ -10,6 +10,10 @@ import Greet from "../components/Greet";
 import SearchComponent from "../components/Search";
 import Table from "../components/Table";
 import TableComponent from "../components/TableComponent";
+import Dashboardss from "../assets/images/dashboard";
+import LinkImage from "../assets/images/LinkImage";
+import SettingImage from "../assets/images/SettingImage";
+import AnalyticsImage from "../assets/images/AnalyticsImage";
 
 const UserLinks = () => {
   const navigate = useNavigate();
@@ -66,33 +70,26 @@ const UserLinks = () => {
         <div className="sidebar-logo">
           <img className="logos" src={logo} alt="" />
         </div>
-        <div className="sidebar-items-container ">
+        <div className="sidebar-items-container">
           <div className="sidebar-items">
             <Link to="/home" className={getSidebarItemClass("/home")}>
-              <span>
-                <i className="ri-home-3-line icons"></i>
-              </span>
+              <Dashboardss />
+
               <h3 className="texts">Dashboard</h3>
             </Link>
 
             <Link to="/links" className={getSidebarItemClass("/links")}>
-              <span>
-                <i className="ri-links-line icons"></i>
-              </span>
+              <LinkImage />
               <h3 className="texts">Links</h3>
             </Link>
             <Link to="/analytics" className={getSidebarItemClass("/analytics")}>
-              <span>
-                <i className="ri-line-chart-fill icons"></i>
-              </span>
+              <AnalyticsImage />
               <h3 className="texts">Analytics</h3>
             </Link>
           </div>
           <div className="settings">
             <Link to="/settings" className={getSidebarItemClass("/settings")}>
-              <span>
-                <i className="ri-settings-3-line icons"></i>
-              </span>
+              <SettingImage />
               <h3 className="texts">Settings</h3>
             </Link>
           </div>
