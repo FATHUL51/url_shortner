@@ -219,9 +219,7 @@ const Home = () => {
               <h4 className="device">Date-wise Clicks</h4>
               <ResponsiveContainer
                 width="100%"
-                height={
-                  graphData.length >= 5 ? 400 : graphData.length > 2 ? 300 : 100
-                }
+                height={graphData.length > 2 ? 300 : 100}
                 className={graphData.length >= 5 ? "scroll-container" : ""}
               >
                 <BarChart
@@ -278,13 +276,7 @@ const Home = () => {
               <h4 className="device">Click Devices</h4>
               <ResponsiveContainer
                 width="100%"
-                height={
-                  deviceGraphData.length >= 5
-                    ? 400
-                    : deviceGraphData.length > 2
-                    ? 300
-                    : 100
-                }
+                height={deviceGraphData.length > 2 ? 300 : 100}
                 className={
                   deviceGraphData.length >= 5 ? "scroll-container" : ""
                 }
