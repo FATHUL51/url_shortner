@@ -59,9 +59,14 @@ const Settings = () => {
 
   const updateDetails = async (e) => {
     e.preventDefault();
+
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const mobile = document.getElementById("mobile").value;
+
+    const currentEmail = user?.email;
+    const currentMobile = user?.mobile;
+
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/update`,
@@ -76,9 +81,20 @@ const Settings = () => {
           },
         }
       );
+
       if (response.status === 200) {
         Toastify({ text: "Profile updated successfully" }).showToast();
-        fetchUserName();
+
+        // If email or mobile number has changed, remove token and navigate to login
+        if (email !== currentEmail || mobile !== currentMobile) {
+          localStorage.removeItem("token");
+          Toastify({
+            text: "Email or mobile updated. Please log in again.",
+          }).showToast();
+          navigate("/login");
+        } else {
+          fetchUserName(); // Refresh user details if token remains valid
+        }
       }
     } catch (err) {
       console.error(err);

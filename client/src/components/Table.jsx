@@ -30,10 +30,8 @@ const Table = () => {
     fetchAnalyticsData();
   }, []);
 
-  // Calculate rows to display for the current page
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-  const currentRows = analyticsData
+  // Flatten and sort analytics data by timestamp (newest first)
+  const flattenedData = analyticsData
     .flatMap((entry) =>
       entry.clicks.map((click) => ({
         timestamp: click.timestamp,
@@ -44,12 +42,14 @@ const Table = () => {
         os: click.os,
       }))
     )
-    .slice(startIndex, endIndex);
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Sort by timestamp (newest first)
 
-  const totalPages = Math.ceil(
-    analyticsData.reduce((sum, entry) => sum + entry.clicks.length, 0) /
-      rowsPerPage
-  );
+  // Calculate rows to display for the current page
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const currentRows = flattenedData.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(flattenedData.length / rowsPerPage);
 
   // Handle page changes
   const handlePageChange = (pageNumber) => {

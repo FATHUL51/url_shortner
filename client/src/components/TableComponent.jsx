@@ -63,6 +63,7 @@ const TableWithSearchComponent = () => {
                   <th>Date</th>
                   <th>Original Link</th>
                   <th>Short Link</th>
+                  <th>Remarks</th>
                   <th>Clicks</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -129,6 +130,7 @@ const TableWithSearchComponent = () => {
                           ></i>
                         </span>
                       </td>
+                      <td>{row.remarks}</td>
                       <td>{row.clicks.length}</td>
                       <td
                         className={

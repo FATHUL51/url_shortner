@@ -220,23 +220,24 @@ const Home = () => {
               <ResponsiveContainer
                 width="100%"
                 height={
-                  graphData.length >= 5
-                    ? 400
-                    : graphData.length >= 2
-                    ? 300
-                    : 100
+                  graphData.length >= 5 ? 400 : graphData.length > 2 ? 300 : 100
                 }
                 className={graphData.length >= 5 ? "scroll-container" : ""}
               >
                 <BarChart
-                  data={[...graphData].sort(
-                    (a, b) => new Date(b.date) - new Date(a.date)
-                  )}
+                  data={graphData}
                   layout="vertical"
                   margin={{ top: 0, right: 20, left: 20, bottom: 0 }}
                   barCategoryGap={15}
                 >
-                  <XAxis type="number" hide />
+                  <XAxis
+                    type="number"
+                    domain={[
+                      0,
+                      Math.max(...graphData.map((item) => item.clicks)),
+                    ]}
+                    hide={true} // Optionally show grid lines
+                  />
                   <YAxis
                     type="category"
                     dataKey="date"
@@ -259,12 +260,13 @@ const Home = () => {
                     barSize={24}
                     radius={[0, 8, 8, 0]}
                   >
+                    {/* Labels placed inside, aligned to the right */}
                     <LabelList
                       dataKey="clicks"
                       position="right"
                       style={{
                         fontWeight: "700",
-                        fontSize: "14px",
+                        fontSize: "12px",
                         fill: "#000",
                       }}
                     />
@@ -293,7 +295,14 @@ const Home = () => {
                   margin={{ top: 0, right: 20, left: 20, bottom: 0 }}
                   barCategoryGap={0}
                 >
-                  <XAxis type="number" hide />
+                  <XAxis
+                    type="number"
+                    domain={[
+                      0,
+                      Math.max(...deviceGraphData.map((item) => item.clicks)),
+                    ]}
+                    hide={true} // Optionally set to true to hide the axis
+                  />
                   <YAxis
                     dataKey="device"
                     type="category"
@@ -311,6 +320,7 @@ const Home = () => {
                     barSize={24}
                     radius={[0, 8, 8, 0]}
                   >
+                    {/* Labels positioned at the inside end of the bars */}
                     <LabelList
                       dataKey="clicks"
                       position="right"
