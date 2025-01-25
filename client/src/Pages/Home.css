@@ -3,8 +3,16 @@
     grid-template-columns: 1fr 3fr;
     position: relative;
     height: 100vh;
+    overflow: hidden;
 }
-
+.sidebar-items-container {
+  background-color: #fff;
+  border-right: 3px solid #f0f0f0;
+  padding: 1rem 0;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
 .sidebar-logo{
     display: flex;
     flex-direction: column;
@@ -18,24 +26,13 @@
     height: 3rem;
 }
 .vr{
-    border-left: solid 3px #f6f6f9;
+    border-left: none;
     position: absolute;
-    top:12%;
+    top: 12.2%;
     bottom: 0;
-    left: 25%;
+    left: 16%;
 }
-@media (min-width: 1400px) {
-    .vr{
-        top:9.5%;
-    }
-    
-}
-@media (min-width: 1500px) {
-    .vr{
-        top:5.5%;
-    }
-    
-}
+
 .sidebar-items{
     display: flex;
     flex-direction: column;
@@ -71,58 +68,84 @@
     margin: 1.5rem 0;
     padding: 1.5rem 0;
 }
+.navbar{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 .searchbar{
     display: grid;
     grid-template-columns: 3fr 3fr  .5fr;
     justify-content: space-between;
     border-bottom: solid 3px #f6f6f9;
 }
-.profilecont{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 0;
-    cursor: pointer;
-}
-.profile{
+.profilecont {
     position: relative;
-    width: 4rem;
-    height: 4rem;
+    display: inline-block;
+  }
+  
+  .profilecont{
+    display:flex ;
+    height: 100%;
+    align-items: center;
+  }
+  .profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background: #fde48a;
     border-radius: 50%;
-    background-color: brown;
-}
-.usertext{
-    position: absolute;
-    top: 11%;
-    left: 24%;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .profile:hover {
+    transform: scale(1.1); 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .usertext {
     font-family: "Manrope";
+    font-size: 18px; 
     font-weight: 700;
-    font-size: 2rem;
-    color: #fff;
+    color: #923E0E;
     margin: 0;
-    padding: 0;
-}
-.profile-dropdown{
+  }
+  
+  .profile-dropdown {
     position: absolute;
-    top: 6rem;
+    top: 80%;
     right: 0;
-    width: 9rem;
-    border-radius: .5rem;
-    color: #000;
-}
-.logout{
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  .logout {
+    position: absolute;
+    right: 4rem;
     font-family: "Manrope";
     font-weight: 600;
-    font-size: 1rem;
-    padding: .5rem 1.5rem;
-    text-align: center;
+    background-color: #fff;
+    color: #878b89;
+    border: solid 1px #e0e0e0;
+    border-radius: 4px;
+    padding: 0.5rem 2rem;
+    font-size: 14px;
     cursor: pointer;
-    background-color: #f6f6f9;
-    color:#878b89;
-    border: none;
-    border-radius: 0.4rem;
-}
+    transition: background-color 0.2s ease;
+  }
+  
+  .logout:hover {
+    background-color: #333;
+    color: #fff;
+  }
+  
 .sidebar-item {
     padding: 10px;
     color: #333;
@@ -135,6 +158,28 @@
     font-weight: bold;
   }
   .maintexts{
-    margin-left: 10px;
-    margin-top: 10px;
+    margin: 10px 10px;
   }
+.device{
+    margin-bottom: 2.1em;
+}
+.graphcontainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    overflow: hidden;
+}
+.device{
+    color:#1b48da
+}
+.clickdashboard{
+    border: solid 1px #878b89;
+    border-radius: .5rem;
+    padding: 0 0 0 1rem ;
+}
+.devicegraph{
+    border: solid 1px #878b89;
+    border-radius: .5rem;
+    padding: 0 0 0 1rem ;
+
+}

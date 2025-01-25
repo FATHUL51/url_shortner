@@ -6,3 +6,59 @@
  font-family: "Manrope";
 }
 
+/* Global Toastify Styling */
+.Toastify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2f80ed;
+  background-color: white;
+  border: 1px solid #2f80ed;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px 16px;
+  width: fit-content;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+/* Slide-in from left animation */
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Fade-out animation */
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Toastify Animation */
+.toastify {
+  animation: slide-in 0.5s ease-out, fade-out 0.5s ease-in 2.5s;
+}
+
+/* Positioning */
+.toastify.toastify-center {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}

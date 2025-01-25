@@ -16,16 +16,17 @@ const Greet = () => {
   let greeting = "";
   let avatarUrl = "";
 
-  if (hours > 6 && hours < 12) {
+  // Corrected time range checks
+  if (hours >= 6 && hours < 12) {
     greeting = "Good morning";
     avatarUrl = "☀️";
-  } else if (hours > 12 && hours < 18) {
+  } else if (hours >= 12 && hours < 18) {
     greeting = "Good afternoon";
     avatarUrl = "🌤️";
-  } else if (hours > 18 && hours < 22) {
+  } else if (hours >= 18 && hours < 22) {
     greeting = "Good evening";
     avatarUrl = "🌃";
-  } else if (hours > 22 || hours < 6) {
+  } else {
     greeting = "Good night";
     avatarUrl = "🌙";
   }

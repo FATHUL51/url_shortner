@@ -8,6 +8,7 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import Greet from "../components/Greet";
 import SearchComponent from "../components/Search";
+import Table from "../components/Table";
 
 const Analytics = () => {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const Analytics = () => {
         <div className="sidebar-logo">
           <img className="logos" src={logo} alt="" />
         </div>
-        <div>
+        <div className="sidebar-items-container ">
           <div className="sidebar-items">
             <Link to="/home" className={getSidebarItemClass("/home")}>
               <span>
@@ -124,7 +125,7 @@ const Analytics = () => {
             )}
           </div>
         </div>
-        <div className="maintexts">home</div>
+        <Table />
       </div>
     </div>
   );

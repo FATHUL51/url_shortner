@@ -116,7 +116,7 @@ const Settings = () => {
         <div className="sidebar-logo">
           <img className="logos" src={logo} alt="" />
         </div>
-        <div>
+        <div className="sidebar-items-container ">
           <div className="sidebar-items">
             <Link to="/home" className={getSidebarItemClass("/home")}>
               <span>
