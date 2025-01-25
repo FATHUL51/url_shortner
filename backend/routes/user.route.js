@@ -184,8 +184,10 @@ router.get("/url", authMiddleware, async (req, res) => {
 router.get("/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
 
-  // Get the IP address from the 'X-Forwarded-For' header or default to req.ip
-  const ipAddress = req.headers["x-forwarded-for"]?.split(",")[0] || req.ip;
+  // Get the IP address from the 'X-Forwarded-For' header or req.ip
+  const ipAddress = req.headers["x-forwarded-for"]
+    ? req.headers["x-forwarded-for"].split(",")[0].trim()
+    : req.ip;
 
   const deviceType = req.device.type;
   const userAgent = req.headers["user-agent"];
