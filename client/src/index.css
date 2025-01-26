@@ -7,7 +7,7 @@
 }
 
 /* Global Toastify Styling */
-.Toastify {
+.toastify {
   display: flex;
   align-items: center;
   justify-content: center;

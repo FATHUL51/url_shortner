@@ -39,9 +39,6 @@ const Home = () => {
   const getSidebarItemClass = (path) => {
     return location.pathname === path ? "sidebar-item active" : "sidebar-item";
   };
-  const getImageItemClass = (path) => {
-    return location.pathname === path ? "image active" : "image";
-  };
 
   const handleLogout = () => {
     const token = localStorage.getItem("token");
@@ -204,13 +201,7 @@ const Home = () => {
           </div>
         </div>
         <div className="maintexts">
-          <h2
-            style={{
-              color: "#1b48da",
-              margin: "3rem 0",
-              fontFamily: "Manrope",
-            }}
-          >
+          <h2 className="clicksm">
             Total Clicks:{" "}
             {graphData.reduce((acc, curr) => acc + curr.clicks, 0)}
           </h2>

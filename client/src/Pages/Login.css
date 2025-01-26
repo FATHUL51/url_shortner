@@ -111,8 +111,38 @@ body{
    text-align: center;
    margin: 0;
 }
-
+.logos1{
+    display: none;
+}
 .signupline{
     text-decoration: none;
     color: #1b48da;
+}
+@media (min-width:300px) and (max-width:768px){
+    .container{
+       display: none;
+    }
+    .image{
+        display: none;
+    }
+    .logos1{
+        position: absolute;
+        display: inline;
+        width: 20%;
+        top:1.8rem;
+        left:2rem
+    }
+    .main{
+        position: relative;
+        display: block;
+        height: 100vh;
+        width: 100%;
+    }
+    .maincontainer{
+        gap: 2rem;
+        height: 100vh;
+    }
+    .divcont{
+        
+    }
 }

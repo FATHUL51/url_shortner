@@ -64,6 +64,8 @@ const Login = () => {
         <img className="image" src={image} alt="" />
       </div>
       <div className="maincontainer">
+        <img className="logos1" src={logo} alt="" />
+
         <div className="top">
           <Link to="/Signup">
             <button className="signupbtn">Signup</button>

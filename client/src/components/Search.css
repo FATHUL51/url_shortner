@@ -30,7 +30,7 @@
 }
 .filter{
     position: relative;
-    width: 50%;
+    width: 70%;
     border-radius: 0.4rem;
     border: solid 2px #b1b3c8;
     padding: 0.2rem 0 0.2rem 3rem;
@@ -115,17 +115,17 @@
   
   .yep {
     position: absolute;
-    top: 0;
+    top: -3px;
     left: 0;
     width: 50px;
     height: 25px;
   }
   .createsection{
-    position: absolute;
+    position: fixed;
     background-color: white;
     top:20%;
     right: 30%;
-    z-index: 1;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     width: 30rem;
@@ -206,4 +206,93 @@
     font-weight: 600;
     border-radius: 0.4rem;
     border:none;
+  }
+  .error {
+    border: 1px solid red;
+  }
+  @media (min-width:767px) and (max-width: 1024px) {
+    .iconx {
+        top: 20%;
+    }
+    .createsection{
+      top:0;
+      right: 15%;
+    }
+    .buttonkatil{
+      margin-top: 10px;
+    }
+    .search-container{
+      display: flex;
+      width: 100%;
+    }
+    .search{
+      width: 100%;
+    }
+    .filter{
+      width: 70%;
+      padding-left: 2rem;
+    }
+    .createstyle{
+      width: 14rem;
+    }
+  }
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 767px) {
+    .search {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+        height: auto;
+        margin-top: 6rem;
+    }
+    
+  
+    .createstyle {
+        width: 9rem;
+        position:fixed;
+        font-size: 0.9rem;
+        height: 2.5rem;
+        bottom: 5.5rem;
+        right: 1rem;
+        z-index: 1;
+    }
+  
+    .filter {
+        width: 88%;
+        padding: 0.4rem 0 0.4rem 2rem;
+        height: 2rem;
+        font-size: 0.9rem;
+    }
+  
+    .iconx {
+        top: 25%;
+        font-size: 1.2rem;
+    }
+    .createsection{
+      top:0;
+    }
+    .buttonkatil{
+      margin: 10px 0 0 0;
+    }
+    .createsection{
+      width: 100%;
+      top:5%;
+      left: 0;
+      overflow: hidden;
+    }
+    .originallink,.remarks{
+      margin: 0.5rem 0;
+      width: 100%;
+    }
+    .profilecont{
+      position: fixed;
+      top:2rem;
+      height: 10%;
+      right:15px;
+      z-index: 1;
+    }
+    .logout{
+      top:0rem;
+    }
   }

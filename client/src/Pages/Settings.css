@@ -82,17 +82,23 @@
     background-color: #a71d2a;
 }
 .delete-dropdown {
-    background-color: white;
-    position: absolute;
-    width: 30rem; 
-    height: 15rem;
-    border-radius: 0.5rem; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+  }
+  
 
 .crosss {
     font-size: 1.5rem;
@@ -165,4 +171,23 @@
 .dltbtn1:hover {
     background-color: #d9d9db; /* Slightly darker gray on hover */
     transform: scale(1.05); /* Slight zoom on hover */
+}
+@media( min-width:767px) and (max-width:1023px) {
+    .delete-dropdown{
+        top:30%;
+        right: 20%;
+    }
+}
+@media (max-width:767px) {
+    .settings-container{
+        margin: 0;
+        width: 100%;
+    }
+    .btn-container{
+        width: 100%;
+        margin-bottom: 4rem;
+    }
+    .anthing{
+        padding: 10px;
+    }
 }

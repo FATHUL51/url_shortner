@@ -8,7 +8,6 @@ import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 import Greet from "../components/Greet";
 import SearchComponent from "../components/Search";
-import Table from "../components/Table";
 import TableComponent from "../components/TableComponent";
 import Dashboardss from "../assets/images/dashboard";
 import LinkImage from "../assets/images/LinkImage";
@@ -20,6 +19,8 @@ const UserLinks = () => {
   const location = useLocation();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [name, setName] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [allLinks, setAllLinks] = useState([]);
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -36,7 +37,6 @@ const UserLinks = () => {
       Toastify({ text: "Logged out successfully" }).showToast();
       navigate("/login");
     }
-    console.log("Logout clicked");
   };
 
   const fetchUserName = async () => {
@@ -57,12 +57,56 @@ const UserLinks = () => {
     }
   };
 
-  useEffect(() => {
-    if (location.pathname === "/links") {
-      navigate("/links");
+  const fetchLinks = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/url`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setAllLinks(response.data.data || []);
+        setSearchResults(response.data.data || []); // Initialize search results
+      }
+    } catch (err) {
+      console.error(err);
     }
+  };
+
+  const handleSearch = async (query) => {
+    if (!query.trim()) {
+      setSearchResults(allLinks); // Reset to all links when search is cleared
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/`,
+        {
+          params: { query },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setSearchResults(response.data.data || []);
+    } catch (err) {
+      console.error("Error fetching search results:", err);
+      setSearchResults([]);
+    }
+  };
+  const refreshLinks = () => {
+    fetchLinks(); // Refresh the links after an edit or delete
+  };
+
+  useEffect(() => {
     fetchUserName();
-  }, [location.pathname, navigate]);
+    fetchLinks();
+  }, []);
+
   return (
     <div className="mainbody">
       <div className="vr"></div>
@@ -74,10 +118,8 @@ const UserLinks = () => {
           <div className="sidebar-items">
             <Link to="/home" className={getSidebarItemClass("/home")}>
               <Dashboardss />
-
               <h3 className="texts">Dashboard</h3>
             </Link>
-
             <Link to="/links" className={getSidebarItemClass("/links")}>
               <LinkImage />
               <h3 className="texts">Links</h3>
@@ -101,28 +143,25 @@ const UserLinks = () => {
             <Greet />
           </div>
           <div>
-            <SearchComponent />
+            <SearchComponent
+              onSearch={handleSearch}
+              refreshLinks={refreshLinks}
+            />
           </div>
           <div className="profilecont">
             <div className="profile" onClick={toggleDropdown}>
               <h1 className="usertext">{name.trim().substring(0, 2)}</h1>
             </div>
-
             {isDropdownVisible && (
               <div className="profile-dropdown">
-                <button
-                  className="logout"
-                  onClick={() => {
-                    handleLogout();
-                  }}
-                >
+                <button className="logout" onClick={handleLogout}>
                   Logout
                 </button>
               </div>
             )}
           </div>
         </div>
-        <TableComponent />
+        <TableComponent links={searchResults} refreshLinks={refreshLinks} />
       </div>
     </div>
   );

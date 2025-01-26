@@ -1,20 +1,20 @@
-.analytics-container {
+.analyticss-container {
+  display: flex;
     padding: 0;
-    margin: 0;
+    margin: 0 ;
     width: 95%;
     height: 100%;
     box-sizing: border-box;
-    margin: auto;
     position: relative;
-
   }
 
-  .analytics-table {
+  .analyticss-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
   }
   
   .analytics-table th,
@@ -48,12 +48,13 @@
   }
   
   .analytics-container table {
-    min-width: 100%;
+    min-width: 90%;
   }
   
-  @media (max-width: 768px) {
-    .analytics-container {
-      padding: 10px;
+  @media (max-width: 768px)  {
+    .analyticss-container {
+      height: 70vh;
+      margin: 0 0 0 1rem;
     }
   
     .analytics-table th,
@@ -100,4 +101,70 @@
     cursor: not-allowed;
   }
   
-  
+  @media (max-width: 768px) {
+  /* Tablet view adjustments */
+  .analyticss-container {
+    padding: 10px;
+  }
+
+  .analytics-table {
+    font-size: 12px;
+  }
+
+  .analytics-table th,
+  .analytics-table td {
+    font-size: 12px;
+    padding: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pagination {
+    position: static;
+    margin-top: 10px;
+    gap: 2px;
+  }
+
+  .page-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Phone view adjustments */
+  .analytics-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .analytics-table th,
+  .analytics-table td {
+    display: block;
+    text-align: left;
+    font-size: 10px;
+    padding: 6px;
+  }
+
+  .analytics-table tr {
+    display: block;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .analytics-table th {
+    font-weight: bold;
+    background-color: #f9f9f9;
+  }
+
+  .pagination {
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .page-button {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}

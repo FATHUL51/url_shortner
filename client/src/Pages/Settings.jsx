@@ -68,8 +68,7 @@ const Settings = () => {
     const email = document.getElementById("email").value;
     const mobile = document.getElementById("mobile").value;
 
-    const currentEmail = user?.email;
-    const currentMobile = user?.mobile;
+    const currentEmail = user?.email; // Store the current email for comparison
 
     try {
       const response = await axios.put(
@@ -87,21 +86,39 @@ const Settings = () => {
       );
 
       if (response.status === 200) {
-        Toastify({ text: "Profile updated successfully" }).showToast();
+        Toastify({
+          text: "Profile updated successfully",
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#4CAF50",
+        }).showToast();
 
-        // If email or mobile number has changed, remove token and navigate to login
-        if (email !== currentEmail || mobile !== currentMobile) {
-          localStorage.removeItem("token");
+        // If the email has changed, log out the user
+        if (email !== currentEmail) {
           Toastify({
-            text: "Email or mobile updated. Please log in again.",
+            text: "Email updated. Please log in again.",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#FF5733",
           }).showToast();
-          navigate("/login");
+
+          localStorage.removeItem("token"); // Remove the token
+          navigate("/login"); // Redirect to login
         } else {
-          fetchUserName(); // Refresh user details if token remains valid
+          fetchUserName(); // Refresh user details if email hasn't changed
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error updating profile:", err);
+      Toastify({
+        text: "Failed to update profile. Please try again.",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#FF5733",
+      }).showToast();
     }
   };
 
@@ -189,7 +206,7 @@ const Settings = () => {
             )}
           </div>
         </div>
-        <div className="maintexts">
+        <div className="anthing">
           <form className="settings-form">
             <div className="settings-container">
               <label className="settingname">Name</label>
