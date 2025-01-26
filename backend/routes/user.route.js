@@ -237,7 +237,7 @@ router.get("/:shortId", async (req, res) => {
 
     // Check if the link has expired
     if (entry.expirationdate && new Date(entry.expirationdate) < new Date()) {
-      return res.status(410).json({ message: "This link has expired." });
+      return res.status(410).json({ message: "This link has expired :() ." });
     }
 
     // Log the click details (IP address, device type, etc.)
