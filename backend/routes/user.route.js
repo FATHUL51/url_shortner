@@ -115,8 +115,6 @@ router.post("/url", authMiddleware, async (req, res) => {
       expirationdate: expirationdate ? new Date(expirationdate) : null,
     });
 
-    console.log("Saving expirationdate to DB:", shortURL.expirationdate);
-
     res.status(201).json({
       message: "Short URL created successfully",
       id: shortID,
@@ -312,17 +310,12 @@ router.get("/", authMiddleware, async (req, res) => {
       return res.status(400).json({ message: "Search query is required" });
     }
 
-    console.log("Query received:", query);
-    console.log("Authenticated User ID:", req.user.id);
-
     const filter = {
       user: req.user.id,
       remarks: { $regex: query, $options: "i" }, // Perform regex search
     };
-    console.log("MongoDB Query Filter:", filter);
 
     const results = await ShortUrlModel.find(filter);
-    console.log("Search Results:", results);
 
     if (results.length === 0) {
       return res.status(404).json({ message: "No matching links found" });
