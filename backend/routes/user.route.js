@@ -90,8 +90,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/url", authMiddleware, async (req, res) => {
-  const { orignalLink, remarks, expirationdate, device } = req.body; // Include remarks and expirationdate
-  const ipAddress = req.ip || req.headers["x-forwarded-for"] || "Unknown";
+  const { originalLink, remark, expirationdate } = req.body;
   const shortID = shortid();
 
   try {
@@ -100,53 +99,28 @@ router.post("/url", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (!orignalLink) {
+    if (!originalLink) {
       return res.status(400).json({ message: "Original URL is required" });
     }
 
-    if (!remarks) {
+    if (!remark) {
       return res.status(400).json({ message: "Remarks are required" });
     }
 
-    // Ensure the device object exists and has the necessary properties
-    const deviceInfo = device
-      ? {
-          device: device.deviceType || "Unknown",
-          os: device.os || "Unknown",
-          browser: device.browserName || "Unknown",
-          browserVersion: device.browserVersion || "Unknown",
-        }
-      : {
-          device: "Unknown",
-          os: "Unknown",
-          browser: "Unknown",
-          browserVersion: "Unknown",
-        };
-
-    // Create the short URL with remarks and expiration date
     const shortURL = await ShortUrlModel.create({
       shortId: shortID,
-      redirectURL: orignalLink,
-      user: user,
-      remarks: remarks,
-      expirationdate: expirationdate || null, // If no expiration date, set to null
-      clicks: [], // Initially no clicks
+      redirectURL: originalLink,
+      user: user._id,
+      remarks: remark,
+      expirationdate: expirationdate ? new Date(expirationdate) : null,
     });
 
-    // Log the click details for the first click (optional)
-    shortURL.clicks.push({
-      timestamp: Date.now(),
-      ipAddress: ipAddress,
-      ...deviceInfo,
-    });
-
-    // Save the short URL with the click information
-    await shortURL.save();
+    console.log("Saving expirationdate to DB:", shortURL.expirationdate);
 
     res.status(201).json({
       message: "Short URL created successfully",
       id: shortID,
-      redirectURL: orignalLink,
+      redirectURL: originalLink,
     });
   } catch (error) {
     console.error(error);
@@ -154,6 +128,78 @@ router.post("/url", authMiddleware, async (req, res) => {
       message: "Internal server error",
       error: error.message,
     });
+  }
+});
+
+router.put("/url/:id", authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const { originalLink, remark, expirationdate } = req.body;
+
+  try {
+    // Find the short URL by its ID and ensure it belongs to the authenticated user
+    const shortURL = await ShortUrlModel.findOne({
+      _id: id,
+      user: req.user.id,
+    });
+
+    if (!shortURL) {
+      return res
+        .status(404)
+        .json({ message: "Short URL not found or unauthorized" });
+    }
+
+    // Update fields if provided
+    if (originalLink) {
+      shortURL.redirectURL = originalLink;
+    }
+
+    if (remark) {
+      shortURL.remarks = remark;
+    }
+
+    if (expirationdate) {
+      shortURL.expirationdate = new Date(expirationdate);
+    } else if (expirationdate === null) {
+      shortURL.expirationdate = null; // Allow removing expiration date
+    }
+
+    // Save the updated short URL
+    await shortURL.save();
+
+    res.status(200).json({
+      message: "Short URL updated successfully",
+      data: shortURL,
+    });
+  } catch (error) {
+    console.error("Error updating short URL:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+router.delete("/url/:id", authMiddleware, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const shortURL = await ShortUrlModel.findOneAndDelete({
+      _id: id,
+      user: req.user.id, // Ensure the URL belongs to the authenticated user
+    });
+
+    if (!shortURL) {
+      return res
+        .status(404)
+        .json({ message: "Short URL not found or unauthorized" });
+    }
+
+    res.status(200).json({ message: "Short URL deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting short URL:", error.message);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
@@ -256,4 +302,42 @@ router.put("/update", authMiddleware, async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 });
+
+router.get("/", authMiddleware, async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    if (!query || query.trim() === "") {
+      console.log("Query is missing or empty");
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    console.log("Query received:", query);
+    console.log("Authenticated User ID:", req.user.id);
+
+    const filter = {
+      user: req.user.id,
+      remarks: { $regex: query, $options: "i" }, // Perform regex search
+    };
+    console.log("MongoDB Query Filter:", filter);
+
+    const results = await ShortUrlModel.find(filter);
+    console.log("Search Results:", results);
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No matching links found" });
+    }
+
+    res.status(200).json({
+      message: "Search results fetched successfully",
+      data: results,
+    });
+  } catch (error) {
+    console.error("Error in /search route:", error.message);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
 module.exports = router;
