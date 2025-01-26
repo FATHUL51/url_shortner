@@ -228,37 +228,52 @@ router.get("/url", authMiddleware, async (req, res) => {
 router.get("/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
 
-  // Get the IP address from the 'X-Forwarded-For' header or req.ip
-  const ipAddress = req.headers["x-forwarded-for"]
-    ? req.headers["x-forwarded-for"].split(",")[0].trim()
-    : req.ip;
+  try {
+    const entry = await ShortUrlModel.findOne({ shortId });
 
-  const deviceType = req.device.type;
-  const userAgent = req.headers["user-agent"];
-  const parser = new UAParser();
-  const result = parser.setUA(userAgent).getResult();
-  const os = result.os.name;
+    if (!entry) {
+      return res.status(404).json({ message: "Short URL not found" });
+    }
 
-  const entry = await ShortUrlModel.findOneAndUpdate(
-    { shortId },
-    {
-      $push: {
-        clicks: {
-          timestamp: Date.now(),
-          ipAddress: ipAddress,
-          device: deviceType,
-          os: os,
+    // Check if the link has expired
+    if (entry.expirationdate && new Date(entry.expirationdate) < new Date()) {
+      return res.status(410).json({ message: "This link has expired." });
+    }
+
+    // Log the click details (IP address, device type, etc.)
+    const ipAddress = req.headers["x-forwarded-for"]
+      ? req.headers["x-forwarded-for"].split(",")[0].trim()
+      : req.ip;
+    const deviceType = req.device.type;
+    const userAgent = req.headers["user-agent"];
+    const parser = new UAParser();
+    const result = parser.setUA(userAgent).getResult();
+    const os = result.os.name;
+
+    // Update clicks
+    await ShortUrlModel.findOneAndUpdate(
+      { shortId },
+      {
+        $push: {
+          clicks: {
+            timestamp: Date.now(),
+            ipAddress: ipAddress,
+            device: deviceType,
+            os: os,
+          },
         },
       },
-    },
-    { new: true }
-  );
+      { new: true }
+    );
 
-  if (!entry) {
-    return res.status(404).json({ message: "Short URL not found" });
+    // Redirect to the original URL
+    res.redirect(entry.redirectURL);
+  } catch (error) {
+    console.error("Error in redirect route:", error.message);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
-
-  res.redirect(entry.redirectURL);
 });
 
 router.delete("/delete", authMiddleware, async (req, res) => {
