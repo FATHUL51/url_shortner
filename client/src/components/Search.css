@@ -129,6 +129,7 @@
     display: flex;
     flex-direction: column;
     width: 30rem;
+    border-radius: 0.4rem;
     gap:1rem;
     border:1px solid #b1b3c8;
     }
@@ -282,8 +283,8 @@
       overflow: hidden;
     }
     .originallink,.remarks{
-      margin: 0.5rem 0;
-      width: 100%;
+      margin: 0.5rem;
+      width: 90%;
     }
     .profilecont{
       position: fixed;
