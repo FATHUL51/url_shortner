@@ -297,7 +297,7 @@
       top:0rem;
     }
   }
-  input[type="date"]::-webkit-calendar-picker-indicator {
+  /* input[type="date"]::-webkit-calendar-picker-indicator {
     color: rgba(0, 0, 0, 0);
     opacity: 1;
     display: block;
@@ -305,4 +305,4 @@
     width: 20px;
     height: 20px;
     border-width: thin;
-}
+} */
