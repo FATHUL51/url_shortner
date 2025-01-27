@@ -5,8 +5,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import img from "../assets/Calendar Outline Icons.webp";
 
 const SearchComponent = ({ onSearch, refreshLinks }) => {
+  const newDate = new Date();
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [originalLink, setOriginalLink] = useState("");
@@ -15,6 +19,7 @@ const SearchComponent = ({ onSearch, refreshLinks }) => {
   const [date, setDate] = useState("");
   const [errors, setErrors] = useState({ originalLink: false, remark: false });
   const navigate = useNavigate();
+  const minDate = new Date();
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -49,11 +54,10 @@ const SearchComponent = ({ onSearch, refreshLinks }) => {
     }
   };
 
-  const handleDateChange = (e) => {
-    console.log("Selected Date:", e.target.value); // Check the date value
-    setDate(e.target.value);
+  const handleDateChange = (date) => {
+    const formattedDate = date ? date.toISOString().split("T")[0] : "";
+    setDate(formattedDate);
   };
-
   const handleCheckboxChange = () => {
     setIsLinkExpired(!isLinkExpired);
   };
@@ -183,16 +187,25 @@ const SearchComponent = ({ onSearch, refreshLinks }) => {
               </div>
             </div>
 
-            {isLinkExpired && (
-              <div>
-                <input
-                  className="originallink"
-                  value={date}
-                  onChange={handleDateChange}
-                  type="date"
-                />
-              </div>
-            )}
+            <div>
+              {isLinkExpired && (
+                <div className="datepicker-container">
+                  <DatePicker
+                    selected={date ? new Date(date) : null}
+                    minDate={minDate}
+                    onChange={handleDateChange}
+                    dateFormat="dd-MM-yyyy"
+                    className="originallink custom-input"
+                    popperPlacement="top-start"
+                    placeholderText="dd-mm-yyyy"
+                    showPopperArrow={false}
+                    calendarClassName="calendar"
+                  />
+
+                  <img className="calenderimage" src={img} alt="" />
+                </div>
+              )}
+            </div>
 
             <div className="buttonkatil">
               <button className="clear" onClick={handleClear}>

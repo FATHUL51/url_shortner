@@ -8,8 +8,12 @@ import PaginationComponent from "./PaginationComponent";
 import Toggle from "../assets/images/Toggle";
 import EditImage from "../assets/images/EditImage";
 import Delete from "../assets/images/Delete";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import img from "../assets/Calendar Outline Icons.webp";
 
 const TableWithSearchComponent = ({ links, refreshLinks }) => {
+  const minDate = new Date();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -122,10 +126,9 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     }
   };
 
-  const handleDateChange = (e) => {
-    const newDate = e.target.value; // e.g., 2025-01-01
-    console.log("Selected Date (yyyy-mm-dd):", newDate); // Check if the date is in the right format
-    setDate(newDate); // Update state with the new date in yyyy-mm-dd format
+  const handleDateChange = (date) => {
+    const formattedDate = date ? date.toISOString().split("T")[0] : "";
+    setDate(formattedDate);
   };
 
   const handleCheckboxChange = () => {
@@ -254,22 +257,20 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     setOriginalLink(link.redirectURL);
     setRemark(link.remarks);
 
-    // Ensure the expiration date is in the correct format
+    // Ensure the expiration date is in yyyy-mm-dd format
     const formattedDate = link.expirationdate
       ? new Date(link.expirationdate).toISOString().split("T")[0]
       : "";
-
-    setDate(formattedDate);
+    setDate(formattedDate); // Set the date in yyyy-mm-dd format
     setIsLinkExpired(link.expirationdate ? true : false);
     setEditingLinkId(link._id);
     setIsDropdownVisible(true);
   };
+
   const formatDateForDisplay = (date) => {
     if (!date) return "";
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
+
+    const [year, month, day] = date.split("-");
     return `${day}-${month}-${year}`;
   };
 
@@ -278,6 +279,23 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     const [day, month, year] = date.split("-"); // Assume format is dd-mm-yyyy
     return `${year}-${month}-${day}`; // Convert to yyyy-mm-dd
   };
+
+  const handleDisplayDateChange = (e) => {
+    const inputDate = e.target.value; // e.g., "27-01-2025"
+
+    // Split the user input (dd-mm-yyyy) and reformat it to yyyy-mm-dd
+    const [day, month, year] = inputDate.split("-");
+    if (day && month && year) {
+      const formattedDate = `${year}-${month}-${day}`;
+      setDate(formattedDate); // Save the date in yyyy-mm-dd format
+    }
+  };
+  useEffect(() => {
+    const backendDate = "2025-01-28T00:00:00.000Z";
+    const formattedDate = backendDate.split("T")[0];
+
+    setDate(formattedDate);
+  }, []);
 
   useEffect(() => {
     filterLinks();
@@ -487,18 +505,25 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                   </div>
                 </div>
 
-                {isLinkExpired && (
-                  <div>
-                    {/* Displaying the date in dd-mm-yyyy format */}
-                    <input
-                      className="originallink"
-                      value={formatDateForDisplay(date)} // Shows dd-mm-yyyy
-                      onChange={handleDateChange}
-                      type="text" // You can use text input to display the formatted date
-                      placeholder="dd-mm-yyyy"
-                    />
-                  </div>
-                )}
+                <div>
+                  {isLinkExpired && (
+                    <div className="datepicker-container">
+                      <DatePicker
+                        selected={date ? new Date(date) : null}
+                        minDate={minDate}
+                        onChange={handleDateChange}
+                        dateFormat="dd-MM-yyyy"
+                        className="originallink custom-input"
+                        popperPlacement="top-start"
+                        placeholderText="dd-mm-yyyy"
+                        showPopperArrow={false}
+                        calendarClassName="calendar"
+                      />
+
+                      <img className="calenderimage" src={img} alt="" />
+                    </div>
+                  )}
+                </div>
 
                 <div className="buttonkatil">
                   <button className="clear" onClick={handleClear}>

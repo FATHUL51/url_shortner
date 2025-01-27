@@ -160,14 +160,76 @@
     color:red;
    }
    
-  .originallink{
-    margin: 1rem 1rem;
-    padding: 0 0 0 1rem;
-    width: 90%;
-    height: 1.8rem;
-    border: 1px solid #b3b3b3;
-    border-radius: 0.3rem;
-  }
+  /* Styling for the input container */
+.datepicker-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Styling for the custom date input */
+.originallink {
+  margin: 1rem;
+  padding: 0 0 0 1rem;
+  width: 90%;
+  height: 1.8rem;
+  border: 1px solid #b3b3b3;
+  border-radius: 0.3rem;
+  font-size: 14px;
+}
+.custom-input {
+  margin: 1rem;
+  padding: 0 0 0 1rem;
+  width: 27rem;
+  height: 1.8rem;
+  border: 1px solid #b3b3b3;
+  border-radius: 0.3rem;
+  font-size: 14px;
+  position: relative;
+}
+.calenderimage{
+  position: absolute;
+  top:30%;
+  right:5%;
+}
+
+/* Custom calendar icon (appears on the input field) */
+.originallink::-webkit-calendar-picker-indicator {
+  background: url('../assets/CalendarOutlineIcons.webp') no-repeat center;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.originallink::-moz-calendar-picker-indicator {
+  background: url('../assets/CalendarOutlineIcons.webp') no-repeat center;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.react-datepicker__calendar {
+  position: absolute;
+  top: -250px;
+  left: 0;
+  z-index: 10;  
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 0.3rem;
+}
+
+/* Optional: Style the calendar container */
+.calendar {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+}
+
   .remarks{
     margin: 1rem 1rem;
     padding: 0.5rem 0 10rem 1rem;
@@ -236,6 +298,9 @@
     .createstyle{
       width: 14rem;
     }
+    .custom-input{
+      width: 27rem;
+    }
   }
   
   /* Mobile Responsiveness */
@@ -284,7 +349,10 @@
     }
     .originallink,.remarks{
       margin: 0.5rem;
-      width: 90%;
+      max-width: 27rem;
+    }
+    .custom-input{
+      width: 19.5rem;
     }
     .profilecont{
       position: fixed;
@@ -297,12 +365,13 @@
       top:0rem;
     }
   }
-  /* input[type="date"]::-webkit-calendar-picker-indicator {
-    color: rgba(0, 0, 0, 0);
-    opacity: 1;
-    display: block;
-    background: url("../assets/Calendar%20Outline%20Icons.webp") no-repeat center center;
-    width: 20px;
-    height: 20px;
-    border-width: thin;
-} */
+  @media (min-width: 425px) and (max-width:426px) {
+    .custom-input {
+      width: 22rem; /* Adjust width for medium screens */
+    }
+  }
+  @media (max-width:321px){
+    .custom-input{
+      width: 16.5rem;
+    };
+  }
