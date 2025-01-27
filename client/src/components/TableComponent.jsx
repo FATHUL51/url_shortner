@@ -71,7 +71,6 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
           link.expirationdate && new Date(link.expirationdate) < new Date()
             ? "Inactive"
             : "Active";
-        console.log("Link status:", status); // Debugging line
         return status.toLowerCase() === statusFilter.toLowerCase();
       });
     }
@@ -96,8 +95,13 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     setCurrentPage(pageNumber);
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownVisible(!isDropdownVisible);
+  const toggleDropdown = (link) => {
+    setOriginalLink(link.redirectURL);
+    setRemark(link.remarks);
+    setDate(link.expirationdate ? link.expirationdate : "");
+    setIsLinkExpired(link.expirationdate ? true : false);
+    setEditingLinkId(link._id);
+    setIsDropdownVisible(true);
   };
 
   const closeDropdown = () => {
@@ -119,8 +123,9 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
   };
 
   const handleDateChange = (e) => {
-    console.log("Selected Date:", e.target.value); // Check the date value
-    setDate(e.target.value);
+    const newDate = e.target.value; // e.g., 2025-01-01
+    console.log("Selected Date (yyyy-mm-dd):", newDate); // Check if the date is in the right format
+    setDate(newDate); // Update state with the new date in yyyy-mm-dd format
   };
 
   const handleCheckboxChange = () => {
@@ -138,8 +143,15 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
         }
       );
       if (response.status === 200) {
-        setAllLinks(response.data.data || []);
-        setFilteredLinks(response.data.data || []); // Set the initial filtered links
+        const linksData = response.data.data || [];
+        const formattedLinks = linksData.map((link) => ({
+          ...link,
+          expirationdate: link.expirationdate
+            ? new Date(link.expirationdate).toISOString().split("T")[0]
+            : null,
+        }));
+        setAllLinks(formattedLinks);
+        setFilteredLinks(formattedLinks);
       }
     } catch (err) {
       console.error(err);
@@ -238,6 +250,34 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     setIsDeleteConfirmationVisible(false);
     setDeletingLinkId(null);
   };
+  const handleLinkData = (link) => {
+    setOriginalLink(link.redirectURL);
+    setRemark(link.remarks);
+
+    // Ensure the expiration date is in the correct format
+    const formattedDate = link.expirationdate
+      ? new Date(link.expirationdate).toISOString().split("T")[0]
+      : "";
+
+    setDate(formattedDate);
+    setIsLinkExpired(link.expirationdate ? true : false);
+    setEditingLinkId(link._id);
+    setIsDropdownVisible(true);
+  };
+  const formatDateForDisplay = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const convertToInputDateFormat = (date) => {
+    if (!date) return "";
+    const [day, month, year] = date.split("-"); // Assume format is dd-mm-yyyy
+    return `${year}-${month}-${day}`; // Convert to yyyy-mm-dd
+  };
 
   useEffect(() => {
     filterLinks();
@@ -260,7 +300,12 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                 <th>Short Link</th>
                 <th>Remarks</th>
                 <th>Clicks</th>
-                <th>
+                <th
+                  style={{
+                    display: "flex",
+                    position: "relative",
+                  }}
+                >
                   Status{" "}
                   <span onClick={toggleDropdownn}>
                     <Toggle />
@@ -325,6 +370,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                                 color: "#2F80ED",
                                 border: "1px solid #2F80ED",
                                 borderRadius: "12px",
+                                padding: " 0.5rem 2.5rem",
                               },
                             }).showToast();
                           }}
@@ -390,7 +436,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
           {isDropdownVisible && (
             <div className="createsection">
               <div className="dropdown-header">
-                <h3 className="h3">New Link</h3>
+                <h3 className="h3">Edit Link</h3>
                 <span onClick={closeDropdown}>
                   <i className="ri-close-line closed"></i>
                 </span>
@@ -443,11 +489,13 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
 
                 {isLinkExpired && (
                   <div>
+                    {/* Displaying the date in dd-mm-yyyy format */}
                     <input
                       className="originallink"
-                      value={date}
+                      value={formatDateForDisplay(date)} // Shows dd-mm-yyyy
                       onChange={handleDateChange}
-                      type="date"
+                      type="text" // You can use text input to display the formatted date
+                      placeholder="dd-mm-yyyy"
                     />
                   </div>
                 )}

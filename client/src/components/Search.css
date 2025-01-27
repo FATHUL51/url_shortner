@@ -276,9 +276,9 @@
       margin: 10px 0 0 0;
     }
     .createsection{
-      width: 100%;
+      width: 93%;
       top:5%;
-      left: 0;
+      left: 10px;
       overflow: hidden;
     }
     .originallink,.remarks{
@@ -287,7 +287,7 @@
     }
     .profilecont{
       position: fixed;
-      top:2rem;
+      top:1.5rem;
       height: 10%;
       right:15px;
       z-index: 1;
@@ -296,3 +296,12 @@
       top:0rem;
     }
   }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
+    display: block;
+    background: url("../assets/Calendar%20Outline%20Icons.webp") no-repeat center center;
+    width: 20px;
+    height: 20px;
+    border-width: thin;
+}

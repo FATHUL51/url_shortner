@@ -128,7 +128,9 @@ const Table = () => {
                     <td>{row.redirectURL}</td>
                     <td>{`https://url-shortner-snq5.onrender.com/api/user/${row.shortId}`}</td>
                     <td>{row.ipAddress}</td>
-                    <td>{row.device}</td>
+                    <td>
+                      {row.device} {row.os}
+                    </td>
                   </tr>
                 ))
               ) : (
