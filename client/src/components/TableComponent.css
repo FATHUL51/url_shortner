@@ -200,3 +200,6 @@
 .dropdown-select option {
   padding: 10px;
 }
+.toogle{
+  position: absolute;
+}

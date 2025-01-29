@@ -11,6 +11,7 @@ import Delete from "../assets/images/Delete";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import img from "../assets/Calendar Outline Icons.webp";
+import Tick from "../assets/images/Tick";
 
 const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const minDate = new Date();
@@ -45,7 +46,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
       if (screenWidth <= 768) {
         newRowsPerPage = 3; // Mobile: 3 rows
       } else if (screenWidth <= 1024) {
-        newRowsPerPage = 5; // Tablet: 5 rows
+        newRowsPerPage = 6; // Tablet: 6 rows
       } else {
         newRowsPerPage = 8; // Desktop: 8 rows
       }
@@ -69,14 +70,48 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     };
   }, [rowsPerPage]);
 
-  const toggleDropdownn = () => {
+  useEffect(() => {
+    const screenWidth = window.innerWidth;
+    let newRowsPerPage;
+
+    if (screenWidth <= 768) {
+      newRowsPerPage = 3; // Mobile: 3 rows
+    } else if (screenWidth <= 1024) {
+      newRowsPerPage = 6; // Tablet: 6 rows
+    } else {
+      newRowsPerPage = 8; // Desktop: 8 rows
+    }
+
+    setRowsPerPage(newRowsPerPage);
+  }, []);
+
+  const toggleDropdownn = (e) => {
+    e.stopPropagation();
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleStatusFilterChange = (status) => {
-    setStatusFilter(status);
+  const handleStatusFilterChange = (e) => {
+    e.stopPropagation();
+    setStatusFilter(e.target.value);
     setCurrentPage(1);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        !event.target.closest(".dropdown-menu") &&
+        !event.target.closest(".dropdown-select")
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const filterLinks = () => {
     let filtered = [...links];
@@ -99,6 +134,10 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
 
     setFilteredLinks(filtered);
   };
+
+  useEffect(() => {
+    filterLinks();
+  }, [statusFilter, dateFilter, links]);
 
   const handleDateFilterChange = () => {
     setDateFilter((prev) => (prev === "newToOld" ? "oldToNew" : "newToOld"));
@@ -294,9 +333,9 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
         <table>
           <thead>
             <tr>
-              <th>
+              <th onClick={handleDateFilterChange}>
                 Date
-                <span onClick={handleDateFilterChange}>
+                <span>
                   <Toggle />
                 </span>
               </th>
@@ -304,17 +343,18 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
               <th>Short Link</th>
               <th>Remarks</th>
               <th>Clicks</th>
-              <th style={{ display: "flex", position: "relative" }}>
+              <th style={{ position: "relative" }} onClick={toggleDropdownn}>
                 Status{" "}
-                <span onClick={toggleDropdownn}>
-                  <Toggle />
+                <span>
+                  <Toggle className="toogle" />
                 </span>
                 {isDropdownOpen && (
                   <div className="dropdown-menu">
                     <select
                       value={statusFilter}
-                      onChange={(e) => handleStatusFilterChange(e.target.value)}
+                      onChange={handleStatusFilterChange}
                       className="dropdown-select"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <option value="all">All</option>
                       <option value="active">Active</option>
@@ -358,6 +398,30 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                           7
                         )}
                         ...
+                        <span
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `https://url-shortner-snq5.onrender.com/api/user/${row.shortId}`
+                            );
+                            Toastify({
+                              text: `✓ Link Copied`,
+                              duration: 3000,
+                              gravity: "bottom",
+                              position: "left",
+                              style: {
+                                background: "white",
+                                color: "#2F80ED",
+                                border: "1px solid #2F80ED",
+                                borderRadius: "12px",
+                                padding: "0.5rem 2.5rem",
+                                display: "flex",
+                                alignItems: "center",
+                              },
+                            }).showToast();
+                          }}
+                        >
+                          <Copy style={{ cursor: "pointer" }} />
+                        </span>
                       </span>
                     </td>
                     <td>{row.remarks}</td>
@@ -428,6 +492,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                   Destination Url <span className="p">*</span>
                 </h3>
                 <input
+                  disabled
                   required
                   className={`originallink ${
                     errors.originalLink ? "error" : ""
