@@ -10,6 +10,7 @@ const { header } = require("express-validator");
 const shortid = require("shortid");
 const device = require("express-device");
 const UAParser = require("ua-parser-js");
+const mongoose = require("mongoose");
 
 dotenv.config();
 router.use(express.json());
@@ -203,8 +204,20 @@ router.delete("/url/:id", authMiddleware, async (req, res) => {
 
 router.get("/url", authMiddleware, async (req, res) => {
   try {
-    // Fetch all short URLs associated with the authenticated user
-    const shortUrls = await ShortUrlModel.find({ user: req.user.id });
+    // Extract page and limit from the query parameters
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit) || 8; // Default to 10 results per page
+    const skip = (page - 1) * limit; // Calculate how many records to skip
+
+    // Fetch the total count of short URLs for pagination
+    const totalCount = await ShortUrlModel.countDocuments({
+      user: req.user.id,
+    });
+
+    // Fetch the paginated short URLs associated with the authenticated user
+    const shortUrls = await ShortUrlModel.find({ user: req.user.id })
+      .skip(skip)
+      .limit(limit);
 
     if (!shortUrls || shortUrls.length === 0) {
       return res
@@ -212,16 +225,78 @@ router.get("/url", authMiddleware, async (req, res) => {
         .json({ message: "No short URLs found for this user" });
     }
 
-    // Return the raw data without using map
+    // Return paginated data with total count for the front-end
     res.status(200).json({
       message: "User short URLs fetched successfully",
       data: shortUrls,
+      pagination: {
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit), // Calculate the total number of pages
+        currentPage: page,
+        limit,
+      },
     });
   } catch (error) {
     console.error(error);
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+router.get("/clicks", authMiddleware, async (req, res) => {
+  const { page = 1, limit = 8 } = req.query; // Default page 1, limit 8
+  const userId = req.user.id;
+
+  try {
+    // Find the user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Fetch user's short URLs
+    const shortUrls = await ShortUrlModel.find({ user: userId });
+
+    // Flatten clicks with relevant details (timestamp, IP, etc.)
+    const allClicks = shortUrls.flatMap((shortUrl) =>
+      shortUrl.clicks.map((click) => ({
+        shortId: shortUrl.shortId,
+        redirectURL: shortUrl.redirectURL,
+        timestamp: click.timestamp,
+        ipAddress: click.ipAddress,
+        device: click.device,
+        os: click.os,
+      }))
+    );
+
+    // Sort clicks by timestamp (newest first)
+    const sortedClicks = allClicks.sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
+
+    // Pagination: Slice clicks based on current page and limit
+    const totalClicks = sortedClicks.length;
+    const totalPages = Math.ceil(totalClicks / limit); // Total pages based on clicks
+    const clicksPage = sortedClicks.slice((page - 1) * limit, page * limit); // Paginated data
+
+    // Send the response
+    res.status(200).json({
+      message: "Clicks fetched successfully.",
+      data: {
+        clicks: clicksPage, // Paginated clicks data
+        pagination: {
+          totalClicks, // Total number of clicks
+          currentPage: parseInt(page), // Current page
+          totalPages, // Total pages
+        },
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching clicks:", err);
+    res.status(500).json({
+      error: "An error occurred while fetching clicks. Please try again.",
+    });
   }
 });
 

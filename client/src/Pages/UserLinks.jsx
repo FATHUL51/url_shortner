@@ -21,6 +21,8 @@ const UserLinks = () => {
   const [name, setName] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [allLinks, setAllLinks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -62,6 +64,10 @@ const UserLinks = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/url`,
         {
+          params: {
+            page: currentPage,
+            limit: rowsPerPage,
+          },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

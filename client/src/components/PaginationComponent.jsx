@@ -1,79 +1,53 @@
 import React from "react";
+import "./Pagination.css";
 
 const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
-  if (!onPageChange) {
-    console.error(
-      "onPageChange function is not provided to PaginationComponent."
-    );
-    return null;
-  }
+  const getPageNumbers = () => {
+    if (totalPages <= 2) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const pages = [1];
+
+    if (currentPage !== 1 && currentPage !== totalPages) {
+      pages.push("...", currentPage, "...");
+    } else {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+    return pages;
+  };
 
   return (
-    <div className="pagination">
-      {/* Previous Button */}
+    <div className="pagination-container">
       <button
-        className="page-button"
+        className="pagination-button"
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        disabled={currentPage <= 1}
       >
-        &lt;
+        ＜
       </button>
 
-      {/* First Page */}
-      {currentPage > 2 && (
-        <>
-          <button
-            className={`page-button ${currentPage === 1 ? "active" : ""}`}
-            onClick={() => onPageChange(1)}
-          >
-            1
-          </button>
-          {currentPage > 3 && <span className="ellipsis">...</span>}
-        </>
-      )}
+      {getPageNumbers().map((page, index) => (
+        <button
+          key={index}
+          onClick={() => (typeof page === "number" ? onPageChange(page) : null)}
+          className={`page-number ${page === currentPage ? "active" : ""} ${
+            page === "..." ? "dots" : ""
+          }`}
+          disabled={page === "..."}
+        >
+          {page}
+        </button>
+      ))}
 
-      {/* Pages Around Current Page */}
-      {Array.from({ length: totalPages }, (_, i) => i + 1)
-        .filter(
-          (page) =>
-            page === currentPage ||
-            page === currentPage - 1 ||
-            page === currentPage + 1
-        )
-        .map((page) => (
-          <button
-            key={page}
-            className={`page-button ${currentPage === page ? "active" : ""}`}
-            onClick={() => onPageChange(page)}
-          >
-            {page}
-          </button>
-        ))}
-
-      {/* Last Page */}
-      {currentPage < totalPages - 1 && (
-        <>
-          {currentPage < totalPages - 2 && (
-            <span className="ellipsis">...</span>
-          )}
-          <button
-            className={`page-button ${
-              currentPage === totalPages ? "active" : ""
-            }`}
-            onClick={() => onPageChange(totalPages)}
-          >
-            {totalPages}
-          </button>
-        </>
-      )}
-
-      {/* Next Button */}
       <button
-        className="page-button"
+        className="pagination-button"
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage >= totalPages}
       >
-        &gt;
+        ＞
       </button>
     </div>
   );
