@@ -271,7 +271,7 @@
   }
 
   .navbar {
-    margin-bottom: 4rem; /* Ensure content doesn't overlap the new fixed menu */
+    margin-bottom: 8rem; /* Ensure content doesn't overlap the new fixed menu */
   }
   .graphcontainer{
     display: flex;

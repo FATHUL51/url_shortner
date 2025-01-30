@@ -8,10 +8,10 @@ import UserContext from "./context/UserContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <UserContext>
-      <BrowserRouter>
+    <BrowserRouter>
+      <UserContext>
         <App />
-      </BrowserRouter>
-    </UserContext>
+      </UserContext>
+    </BrowserRouter>
   </StrictMode>
 );

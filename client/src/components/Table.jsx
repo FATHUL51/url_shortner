@@ -127,7 +127,7 @@ const ClicksTable = () => {
                 Timestamp
                 <Toggle />
               </th>
-              <th>Original Link</th>
+              <th style={{ width: "25%" }}>Original Link</th>
               <th>Short Link</th>
               <th>IP Address</th>
               <th>Device</th>
@@ -155,7 +155,7 @@ const ClicksTable = () => {
                 return (
                   <tr key={index}>
                     <td>{formattedTimestamp}</td>
-                    <td>{redirectURL}</td>
+                    <td style={{ wordBreak: "break-all" }}>{redirectURL}</td>
                     <td>{`https://url-shortner-snq5.onrender.com/api/user/${shortId}`}</td>
                     <td>{ipAddress}</td>
                     <td>

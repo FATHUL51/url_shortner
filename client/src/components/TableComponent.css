@@ -3,7 +3,7 @@
 }
 @media (min-width:300px) and (max-width:1024px) {
   .table-with-search{
-    height: 72vh;
+    height: 100vh;
   }
   .table-container{
     overflow-x: scroll;

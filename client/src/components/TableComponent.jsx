@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./TableComponent.css";
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
@@ -11,12 +11,16 @@ import Delete from "../assets/images/Delete";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import img from "../assets/Calendar Outline Icons.webp";
-import Tick from "../assets/images/Tick";
 
 const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const minDate = new Date();
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth <= 768) return 3;
+    if (screenWidth <= 1024) return 6;
+    return 8;
+  });
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [originalLink, setOriginalLink] = useState("");
   const [errors, setErrors] = useState({ originalLink: false, remark: false });
@@ -27,7 +31,6 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const [date, setDate] = useState("");
   const [editingLinkId, setEditingLinkId] = useState(null);
   const [deletingLinkId, setDeletingLinkId] = useState(null);
-  const [allLinks, setAllLinks] = useState([]);
   const [filteredLinks, setFilteredLinks] = useState([]);
   const [pagination, setPagination] = useState({
     totalClicks: 0,
@@ -38,37 +41,31 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const [dateFilter, setDateFilter] = useState("newToOld");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const handleResize = useCallback(() => {
+    const screenWidth = window.innerWidth;
+    let newRowsPerPage;
+
+    if (screenWidth <= 768) {
+      newRowsPerPage = 3; // Mobile: 3 rows
+    } else if (screenWidth <= 1024) {
+      newRowsPerPage = 6; // Tablet: 6 rows
+    } else {
+      newRowsPerPage = 8; // Desktop: 8 rows
+    }
+
+    if (newRowsPerPage !== rowsPerPage) {
+      setRowsPerPage(newRowsPerPage);
+      setCurrentPage(1);
+    }
+  }, [rowsPerPage]);
+
   useEffect(() => {
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      let newRowsPerPage;
-
-      if (screenWidth <= 768) {
-        newRowsPerPage = 3; // Mobile: 3 rows
-      } else if (screenWidth <= 1024) {
-        newRowsPerPage = 6; // Tablet: 6 rows
-      } else {
-        newRowsPerPage = 8; // Desktop: 8 rows
-      }
-
-      if (newRowsPerPage !== rowsPerPage) {
-        setRowsPerPage(newRowsPerPage);
-        // Reset to first page when screen size changes
-        setCurrentPage(1);
-      }
-    };
-
-    // Initial setup
     handleResize();
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
-
-    // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [rowsPerPage]);
+  }, [handleResize]);
 
   useEffect(() => {
     const screenWidth = window.innerWidth;
@@ -113,7 +110,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     };
   }, []);
 
-  const filterLinks = () => {
+  const filterLinks = useCallback(() => {
     let filtered = [...links];
 
     if (statusFilter !== "all") {
@@ -133,11 +130,11 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     }
 
     setFilteredLinks(filtered);
-  };
+  }, [links, statusFilter, dateFilter]);
 
   useEffect(() => {
     filterLinks();
-  }, [statusFilter, dateFilter, links]);
+  }, [filterLinks]);
 
   const handleDateFilterChange = () => {
     setDateFilter((prev) => (prev === "newToOld" ? "oldToNew" : "newToOld"));
@@ -176,7 +173,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     setDate(formattedDate);
   };
 
-  const fetchLinks = async () => {
+  const fetchLinks = useCallback(async () => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/url`,
@@ -206,7 +203,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     } catch (err) {
       console.error("Error fetching links:", err);
     }
-  };
+  }, [currentPage, rowsPerPage]);
 
   const handleCheckboxChange = () => {
     setIsLinkExpired(!isLinkExpired);
@@ -311,21 +308,11 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
 
   useEffect(() => {
     fetchLinks();
-  }, [currentPage, rowsPerPage]);
+  }, [fetchLinks]);
 
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage); // Update the current page state
+    setCurrentPage(newPage);
   };
-  const currentPageLinks = filteredLinks.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
-
-  useEffect(() => {
-    setFilteredLinks(
-      links.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    );
-  }, [links, currentPage, rowsPerPage]);
 
   return (
     <div className="table-with-search">
@@ -339,7 +326,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                   <Toggle />
                 </span>
               </th>
-              <th>Original Link </th>
+              <th style={{ width: "25%" }}>Original Link</th>
               <th>Short Link</th>
               <th>Remarks</th>
               <th>Clicks</th>
@@ -390,7 +377,9 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                           })
                         : "N/A"}
                     </td>
-                    <td>{row.redirectURL}</td>
+                    <td style={{ wordBreak: "break-all" }}>
+                      {row.redirectURL}
+                    </td>
                     <td>
                       <span className="copy-button">
                         {`https://url-shortner-snq5.onrender.com/api/user/${row.shortId}`.slice(
