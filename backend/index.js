@@ -10,12 +10,7 @@ const device = require("express-device");
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Allow requests from this origin
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(device.capture());
 app.use(cookieParser());
 app.use("/api/user", userRoute);
