@@ -267,7 +267,7 @@ const Home = () => {
               <h4 className="device">Click Devices</h4>
               <ResponsiveContainer
                 width="100%"
-                height={deviceGraphData.length > 2 ? 300 : 100}
+                height={deviceGraphData.length > 3 ? 200 : 100}
                 className={
                   deviceGraphData.length >= 5 ? "scroll-container" : ""
                 }
