@@ -155,8 +155,15 @@ const ClicksTable = () => {
                 return (
                   <tr key={index}>
                     <td>{formattedTimestamp}</td>
-                    <td style={{ wordBreak: "break-all" }}>{redirectURL}</td>
-                    <td>{`https://url-shortner-snq5.onrender.com/api/user/${shortId}`}</td>
+                    <td style={{ wordBreak: "break-all" }}>
+                      {`${redirectURL}`.slice(0, 25)}
+                    </td>
+                    <td>
+                      {`https://url-shortner-snq5.onrender.com/api/user/${shortId}`.slice(
+                        0,
+                        25
+                      )}
+                    </td>
                     <td>{ipAddress}</td>
                     <td>
                       {device}

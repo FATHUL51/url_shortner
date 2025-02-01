@@ -12,15 +12,16 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import img from "../assets/Calendar Outline Icons.webp";
 
-const TableWithSearchComponent = ({ links, refreshLinks }) => {
+const TableWithSearchComponent = ({
+  links,
+  refreshLinks,
+  onSort,
+  currentPage,
+  rowsPerPage,
+  totalItems,
+  onPageChange,
+}) => {
   const minDate = new Date();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(() => {
-    const screenWidth = window.innerWidth;
-    if (screenWidth <= 768) return 3;
-    if (screenWidth <= 1024) return 6;
-    return 8;
-  });
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [originalLink, setOriginalLink] = useState("");
   const [errors, setErrors] = useState({ originalLink: false, remark: false });
@@ -32,11 +33,6 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const [editingLinkId, setEditingLinkId] = useState(null);
   const [deletingLinkId, setDeletingLinkId] = useState(null);
   const [filteredLinks, setFilteredLinks] = useState([]);
-  const [pagination, setPagination] = useState({
-    totalClicks: 0,
-    currentPage: 1,
-    totalPages: 0,
-  });
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("newToOld");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -48,16 +44,16 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     if (screenWidth <= 768) {
       newRowsPerPage = 3; // Mobile: 3 rows
     } else if (screenWidth <= 1024) {
-      newRowsPerPage = 6; // Tablet: 6 rows
+      newRowsPerPage = 5; // Tablet: 5 rows
     } else {
       newRowsPerPage = 8; // Desktop: 8 rows
     }
 
     if (newRowsPerPage !== rowsPerPage) {
       setRowsPerPage(newRowsPerPage);
-      setCurrentPage(1);
+      onPageChange(1);
     }
-  }, [rowsPerPage]);
+  }, [rowsPerPage, onPageChange]);
 
   useEffect(() => {
     handleResize();
@@ -67,21 +63,6 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     };
   }, [handleResize]);
 
-  useEffect(() => {
-    const screenWidth = window.innerWidth;
-    let newRowsPerPage;
-
-    if (screenWidth <= 768) {
-      newRowsPerPage = 3; // Mobile: 3 rows
-    } else if (screenWidth <= 1024) {
-      newRowsPerPage = 6; // Tablet: 6 rows
-    } else {
-      newRowsPerPage = 8; // Desktop: 8 rows
-    }
-
-    setRowsPerPage(newRowsPerPage);
-  }, []);
-
   const toggleDropdownn = (e) => {
     e.stopPropagation();
     setIsDropdownOpen(!isDropdownOpen);
@@ -90,7 +71,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const handleStatusFilterChange = (e) => {
     e.stopPropagation();
     setStatusFilter(e.target.value);
-    setCurrentPage(1);
+    onPageChange(1);
   };
 
   useEffect(() => {
@@ -138,7 +119,8 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
 
   const handleDateFilterChange = () => {
     setDateFilter((prev) => (prev === "newToOld" ? "oldToNew" : "newToOld"));
-    setCurrentPage(1);
+    onSort(dateFilter);
+    onPageChange(1);
   };
 
   const toggleDropdown = (link) => {
@@ -172,38 +154,6 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
     const formattedDate = date ? date.toISOString().split("T")[0] : "";
     setDate(formattedDate);
   };
-
-  const fetchLinks = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/url`,
-        {
-          params: {
-            page: currentPage,
-            limit: rowsPerPage,
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        const linksData = response.data.data || [];
-        const formattedLinks = linksData.map((link) => ({
-          ...link,
-          expirationdate: link.expirationdate
-            ? new Date(link.expirationdate).toISOString().split("T")[0]
-            : null,
-        }));
-
-        setFilteredLinks(formattedLinks);
-        setPagination(response.data.pagination);
-      }
-    } catch (err) {
-      console.error("Error fetching links:", err);
-    }
-  }, [currentPage, rowsPerPage]);
 
   const handleCheckboxChange = () => {
     setIsLinkExpired(!isLinkExpired);
@@ -277,11 +227,10 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
         Toastify({
           text: "Link deleted successfully!",
         }).showToast();
-        fetchLinks();
+        if (refreshLinks) refreshLinks();
       }
 
       closeDeleteConfirmation();
-      if (refreshLinks) refreshLinks();
     } catch (error) {
       console.error("Error deleting link:", error);
       Toastify({
@@ -298,20 +247,6 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
   const closeDeleteConfirmation = () => {
     setIsDeleteConfirmationVisible(false);
     setDeletingLinkId(null);
-  };
-
-  useEffect(() => {
-    setFilteredLinks(
-      links.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-    );
-  }, [links, currentPage, rowsPerPage]);
-
-  useEffect(() => {
-    fetchLinks();
-  }, [fetchLinks]);
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
   };
 
   return (
@@ -378,7 +313,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                         : "N/A"}
                     </td>
                     <td style={{ wordBreak: "break-all" }}>
-                      {row.redirectURL}
+                      {`${row.redirectURL}`.slice(0, 25)}
                     </td>
                     <td>
                       <span className="copy-button">
@@ -554,9 +489,9 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
       </div>
 
       <PaginationComponent
-        currentPage={pagination.currentPage}
-        totalPages={pagination.totalPages}
-        onPageChange={handlePageChange}
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalItems / rowsPerPage)}
+        onPageChange={onPageChange}
       />
     </div>
   );

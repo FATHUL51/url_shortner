@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { UserDataContext } from "../context/UserContext";
@@ -20,24 +20,16 @@ const Signup = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserDataContext);
 
-  const validatePasswords = () => {
-    if (password && confirmpass) {
-      if (password !== confirmpass) {
-        setError("Enter same password in both fields.");
-        return false;
-      }
+  useEffect(() => {
+    if (password !== confirmpass) {
+      setError("Passwords do not match");
+    } else {
       setError("");
-      return true;
     }
-    setError("");
-    return false;
-  };
+  }, [password, confirmpass]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!validatePasswords()) {
-      return;
-    }
 
     const newUser = { username, email, mobile, password };
 
@@ -135,7 +127,7 @@ const Signup = () => {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                validatePasswords();
+                // validatePasswords();
               }}
               required
               placeholder="Password"
@@ -149,7 +141,7 @@ const Signup = () => {
               value={confirmpass}
               onChange={(e) => {
                 setConfirmpass(e.target.value);
-                validatePasswords();
+                // validatePasswords();
               }}
               required
               placeholder="Confirm Password"

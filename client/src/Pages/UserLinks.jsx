@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "remixicon/fonts/remixicon.css";
@@ -22,7 +22,39 @@ const UserLinks = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [allLinks, setAllLinks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth <= 768) return 3;
+    if (screenWidth <= 1024) return 5;
+    return 8;
+  });
+  const [totalItems, setTotalItems] = useState(0);
+
+  const handleResize = useCallback(() => {
+    const screenWidth = window.innerWidth;
+    let newRowsPerPage;
+
+    if (screenWidth <= 768) {
+      newRowsPerPage = 3; // Mobile: 3 rows
+    } else if (screenWidth <= 1024) {
+      newRowsPerPage = 5; // Tablet: 5 rows
+    } else {
+      newRowsPerPage = 8; // Desktop: 8 rows
+    }
+
+    if (newRowsPerPage !== rowsPerPage) {
+      setRowsPerPage(newRowsPerPage);
+      setCurrentPage(1);
+    }
+  }, [rowsPerPage]);
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -75,7 +107,8 @@ const UserLinks = () => {
       );
       if (response.status === 200) {
         setAllLinks(response.data.data || []);
-        setSearchResults(response.data.data || []); // Initialize search results
+        setSearchResults(response.data.data || []);
+        setTotalItems(response.data.pagination.totalItems || 0);
       }
     } catch (err) {
       console.error(err);
@@ -104,6 +137,7 @@ const UserLinks = () => {
       setSearchResults([]);
     }
   };
+
   const refreshLinks = () => {
     fetchLinks(); // Refresh the links after an edit or delete
   };
@@ -111,7 +145,19 @@ const UserLinks = () => {
   useEffect(() => {
     fetchUserName();
     fetchLinks();
-  }, []);
+  }, [currentPage, rowsPerPage]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleSort = (sortOrder) => {
+    const sortedLinks = [...searchResults].sort((a, b) => {
+      const comparison = new Date(b.createdAt) - new Date(a.createdAt);
+      return sortOrder === "newToOld" ? comparison : -comparison;
+    });
+    setSearchResults(sortedLinks);
+  };
 
   return (
     <div className="mainbody">
@@ -167,7 +213,15 @@ const UserLinks = () => {
             )}
           </div>
         </div>
-        <TableComponent links={searchResults} refreshLinks={refreshLinks} />
+        <TableComponent
+          links={searchResults}
+          refreshLinks={refreshLinks}
+          onSort={handleSort}
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+          totalItems={totalItems}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );
