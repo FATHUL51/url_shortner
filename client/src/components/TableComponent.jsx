@@ -378,7 +378,7 @@ const TableWithSearchComponent = ({ links, refreshLinks }) => {
                         : "N/A"}
                     </td>
                     <td style={{ wordBreak: "break-all" }}>
-                      {`${row.redirectURL}`.slice(0.25)}
+                      {`${row.redirectURL}`.slice(0,25)}
                     </td>
                     <td>
                       <span className="copy-button">
